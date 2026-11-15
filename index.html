@@ -1,0 +1,1798 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Little World Made for Sri ♡</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=Sacramento&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" crossorigin="anonymous"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ivory: '#F8F3ED',
+                        blush: '#F0DEDC',
+                        dustyrose: '#D8B6B0',
+                        sage: '#DCE6D7',
+                        olive: '#A7B49A',
+                        champagne: '#E9DDBD',
+                        warmbrown: '#78665E',
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        handwriting: ['"Sacramento"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styling & Smooth Transitions */
+        body {
+            background-color: #F8F3ED;
+            color: #78665E;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            user-select: text;
+        }
+
+        /* Subtle Watercolor & Paper Texture Background with Lotus / Datura vibe */
+        .paper-bg {
+            background-color: #F8F3ED;
+            background-image: 
+                radial-gradient(circle at 12% 25%, rgba(240, 222, 220, 0.45) 0%, transparent 45%),
+                radial-gradient(circle at 88% 75%, rgba(220, 230, 215, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(233, 221, 189, 0.25) 0%, transparent 55%),
+                radial-gradient(#D8B6B0 0.5px, transparent 0.5px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
+        }
+
+        /* Floating Falling Petals CSS Animation with Sideway Drift */
+        .petal {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(240, 222, 220, 0.95) 0%, rgba(216, 182, 176, 0.85) 100%);
+            border-radius: 16px 2px 16px 2px;
+            opacity: 0.8;
+            pointer-events: none;
+            z-index: 10;
+            animation: floatPetal 15s linear infinite;
+        }
+
+        @keyframes floatPetal {
+            0% {
+                transform: translateY(-60px) translateX(0px) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            15% {
+                opacity: 0.9;
+            }
+            50% {
+                transform: translateY(50vh) translateX(45px) rotate(180deg) scale(1.05);
+            }
+            85% {
+                opacity: 0.9;
+            }
+            100% {
+                transform: translateY(105vh) translateX(-35px) rotate(360deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Glowing Light Particles */
+        .light-particle {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(233,221,189,0.5) 60%, transparent 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            animation: pulseGlow 5.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.25; transform: scale(0.8); }
+            50% { opacity: 0.85; transform: scale(1.4); }
+        }
+
+        /* Smooth Chapter Transition */
+        .chapter-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            transform: translateY(12px);
+        }
+
+        .chapter-section.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Published content is read-only. */
+        .direct-photo-frame { cursor: default; }
+
+        /* Envelope Styling */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+        
+        .envelope {
+            width: 320px;
+            height: 220px;
+            background-color: #F0DEDC;
+            position: relative;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(120, 102, 94, 0.12);
+            cursor: pointer;
+            transition: transform 0.4s ease;
+        }
+
+        @media (min-width: 640px) {
+            .envelope {
+                width: 440px;
+                height: 280px;
+            }
+        }
+
+        .envelope:hover {
+            transform: translateY(-5px);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 130px solid #D8B6B0;
+            transform-origin: top;
+            transition: transform 0.6s ease 0.2s, z-index 0.2s;
+            z-index: 5;
+        }
+
+        @media (min-width: 640px) {
+            .envelope-flap {
+                border-left-width: 220px;
+                border-right-width: 220px;
+                border-top-width: 160px;
+            }
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .letter-content {
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 1s ease-in-out, opacity 0.8s ease-in-out 0.4s;
+        }
+
+        .letter-content.show {
+            opacity: 1;
+            max-height: 2200px;
+        }
+
+        /* Candle Flame Animation */
+        .flame {
+            width: 12px;
+            height: 20px;
+            background: radial-gradient(ellipse at bottom, #fff 0%, #ffeb3b 40%, #ff9800 80%, transparent 100%);
+            border-radius: 50% 50% 20% 20%;
+            animation: flicker 1.2s ease-in-out infinite alternate;
+            box-shadow: 0 0 12px rgba(255, 152, 0, 0.8);
+            transform-origin: center bottom;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1) rotate(-2deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+            100% { transform: scale(0.95) rotate(-1deg); }
+        }
+
+        .flame.extinguished {
+            display: none !important;
+        }
+
+        .smoke {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: rgba(167, 180, 154, 0.6);
+            border-radius: 50%;
+            animation: smokeRise 2s ease-out forwards;
+        }
+
+        @keyframes smokeRise {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-40px) scale(3); opacity: 0; }
+        }
+
+        @keyframes bloom {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.12); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .bloom-effect {
+            animation: bloom 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes softFadeSlideUp {
+            0% { opacity: 0; transform: translateY(18px) scale(0.97); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .reveal-animate {
+            animation: softFadeSlideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Chapter 11 Cinematic Slow Zoom & Fade */
+        @keyframes cinematicHeroZoom {
+            0% { opacity: 0; transform: scale(1.06); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .cinematic-hero-anim {
+            animation: cinematicHeroZoom 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        /* Chapter 1 Floating Golden Sparkles & Confetti Motes */
+        @keyframes sparkleFloat {
+            0%, 100% { opacity: 0.25; transform: translateY(0px) scale(0.85) rotate(0deg); }
+            50% { opacity: 0.95; transform: translateY(-10px) scale(1.25) rotate(25deg); }
+        }
+        .gold-sparkle {
+            position: absolute;
+            pointer-events: none;
+            color: #D4AF37;
+            animation: sparkleFloat 4.2s ease-in-out infinite;
+            z-index: 3;
+        }
+
+        @keyframes confettiDrift {
+            0% { transform: translateY(-15px) rotate(0deg); opacity: 0; }
+            20% { opacity: 0.85; }
+            80% { opacity: 0.85; }
+            100% { transform: translateY(95px) rotate(320deg); opacity: 0; }
+        }
+        .ch1-confetti-piece {
+            position: absolute;
+            width: 6px;
+            height: 11px;
+            border-radius: 3px;
+            pointer-events: none;
+            z-index: 3;
+            animation: confettiDrift 6.5s ease-in-out infinite;
+        }
+
+        .botanical-corner {
+            pointer-events: none;
+            position: absolute;
+            z-index: 2;
+            opacity: 0.95;
+        }
+
+        .botanical-vine-left {
+            pointer-events: none;
+            position: fixed;
+            left: 0;
+            top: 10%;
+            width: 80px;
+            height: 80vh;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+            z-index: 1;
+            animation: swayVine 6s ease-in-out infinite alternate;
+            transform-origin: top left;
+        }
+
+        .botanical-vine-right {
+            pointer-events: none;
+            position: fixed;
+            right: 0;
+            top: 10%;
+            width: 80px;
+            height: 80vh;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+            z-index: 1;
+            animation: swayVineRight 7s ease-in-out infinite alternate;
+            transform-origin: top right;
+        }
+
+        @keyframes swayVine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(1.8deg); }
+        }
+
+        @keyframes swayVineRight {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(-1.8deg); }
+        }
+
+        .gold-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #D8B6B0, #E9DDBD, #D8B6B0, transparent);
+            margin: 1.5rem auto;
+            width: 85%;
+            max-width: 340px;
+        }
+
+        .floral-frame {
+            border: 6px solid #F8F3ED;
+            box-shadow: 0 12px 30px rgba(120, 102, 94, 0.12), 0 0 0 1px rgba(216, 182, 176, 0.45);
+            position: relative;
+        }
+
+        .floral-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: #A7B49A;
+            font-size: 0.85rem;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+        }
+
+.music-control {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 12px 18px;
+    border: 1px solid rgba(255,255,255,0.5);
+    border-radius: 999px;
+    background: #D8B6B0;
+    color: #fff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 13px;
+    box-shadow: 0 5px 18px rgba(120,102,94,0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.music-control:hover {
+    transform: translateY(-3px);
+    background: #A7B49A;
+}
+
+.music-control.hidden {
+    display: none;
+}
+
+    </style>
+</head>
+<body class="paper-bg min-h-screen flex flex-col justify-between relative selection:bg-blush selection:text-warmbrown">
+
+    <!-- Floating Petals & Light Particles Container -->
+    <div id="petal-container" class="fixed inset-0 pointer-events-none z-10 overflow-hidden">
+        <div class="light-particle" style="top: 12%; left: 8%; animation-delay: 0s;"></div>
+        <div class="light-particle" style="top: 38%; left: 90%; animation-delay: 1.2s;"></div>
+        <div class="light-particle" style="top: 72%; left: 20%; animation-delay: 2.8s;"></div>
+        <div class="light-particle" style="top: 22%; left: 75%; animation-delay: 1.9s;"></div>
+        <div class="light-particle" style="top: 85%; left: 80%; animation-delay: 3.5s;"></div>
+    </div>
+
+    <!-- Enhanced Botanical Side Vines with Lotus & White Datura Trumpet Flowers -->
+    <div class="botanical-vine-left hidden md:block">
+        <svg viewBox="0 0 90 700" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-dustyrose">
+            <path d="M25,0 Q10,150 30,300 Q10,450 25,600 Q10,660 30,700" stroke="#D8B6B0" stroke-width="1.8" stroke-linecap="round"></path>
+            <path d="M50,30 Q25,180 45,330 Q20,480 50,630" stroke="#A7B49A" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="3 3"></path>
+            
+            <path d="M15,80 C-5,65 -10,105 15,120 C35,130 40,90 15,80 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1.2" opacity="0.9"></path>
+            <path d="M35,65 C18,52 15,85 35,98 C52,108 55,75 35,65 Z" fill="#A7B49A" stroke="#78665E" stroke-width="0.8" opacity="0.7"></path>
+
+            <path d="M25,240 C3,225 0,265 25,280 C45,290 50,250 25,240 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1.2" opacity="0.9"></path>
+            <path d="M45,225 C28,212 25,245 45,258 C62,268 65,235 45,225 Z" fill="#A7B49A" stroke="#78665E" stroke-width="0.8" opacity="0.7"></path>
+
+            <path d="M20,420 C0,405 -5,445 20,460 C40,470 45,430 20,420 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1.2" opacity="0.9"></path>
+            <path d="M40,405 C23,392 20,425 40,438 C57,448 60,415 40,405 Z" fill="#A7B49A" stroke="#78665E" stroke-width="0.8" opacity="0.7"></path>
+
+            <path d="M25,580 C5,565 0,605 25,620 C45,630 50,590 25,580 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1.2" opacity="0.9"></path>
+
+            <g transform="translate(18, 90) scale(1.05)">
+                <path d="M0,15 C-8,5 -12,-5 0,-15 C12,-5 8,5 0,15 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.9"></path>
+                <path d="M-7,10 C-16,3 -19,-3 -7,-10 C0,0 -3,8 -7,10 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.8"></path>
+                <path d="M7,10 C16,3 19,-3 7,-10 C0,0 3,8 7,10 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.8"></path>
+                <circle cx="0" cy="-2" r="3" fill="#E9DDBD"></circle>
+            </g>
+
+            <g transform="translate(45, 175) rotate(-15) scale(0.8)">
+                <path d="M0,10 C-5,3 -6,-3 0,-10 C6,-3 5,3 0,10 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.8"></path>
+            </g>
+
+            <g transform="translate(30, 275) rotate(10) scale(1.15)">
+                <path d="M0,15 C-8,5 -12,-5 0,-15 C12,-5 8,5 0,15 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.9"></path>
+                <path d="M-7,10 C-16,3 -19,-3 -7,-10 C0,0 -3,8 -7,10 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.8"></path>
+                <path d="M7,10 C16,3 19,-3 7,-10 C0,0 3,8 7,10 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.8"></path>
+                <circle cx="0" cy="-2" r="3" fill="#E9DDBD"></circle>
+            </g>
+
+            <g transform="translate(15, 360) rotate(20) scale(0.75)">
+                <path d="M0,10 C-5,3 -6,-3 0,-10 C6,-3 5,3 0,10 Z" fill="#F8F3ED" stroke="#D8B6B0" stroke-width="0.8"></path>
+            </g>
+
+            <g transform="translate(22, 450) rotate(-8) scale(1.1)">
+                <path d="M0,15 C-8,5 -12,-5 0,-15 C12,-5 8,5 0,15 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.9"></path>
+                <path d="M-7,10 C-16,3 -19,-3 -7,-10 C0,0 -3,8 -7,10 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.8"></path>
+                <path d="M7,10 C16,3 19,-3 7,-10 C0,0 3,8 7,10 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.8"></path>
+                <circle cx="0" cy="-2" r="3" fill="#E9DDBD"></circle>
+            </g>
+        </svg>
+    </div>
+
+    <div class="botanical-vine-right hidden md:block">
+        <svg viewBox="0 0 90 700" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full text-dustyrose">
+            <path d="M65,0 Q80,150 60,300 Q80,450 65,600 Q80,660 60,700" stroke="#D8B6B0" stroke-width="1.8" stroke-linecap="round"></path>
+            <path d="M40,30 Q65,180 45,330 Q70,480 40,630" stroke="#A7B49A" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="3 3"></path>
+
+            <path d="M75,90 C92,75 95,105 75,120 C58,130 52,100 75,90 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1.2" opacity="0.9"></path>
+            <path d="M55,230 C72,218 75,245 55,258 C38,268 35,238 55,230 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1.2" opacity="0.9"></path>
+            <path d="M70,390 C87,375 90,405 70,420 C53,430 48,400 70,390 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1.2" opacity="0.9"></path>
+            <path d="M55,550 C72,538 75,565 55,578 C38,588 35,558 55,550 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1.2" opacity="0.9"></path>
+
+            <g transform="translate(50, 100) rotate(-25) scale(1.15)">
+                <path d="M0,0 Q12,-15 22,-8 Q28,5 15,18 Q5,15 0,0 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.95"></path>
+                <circle cx="12" cy="5" r="3.5" fill="#E9DDBD"></circle>
+            </g>
+
+            <g transform="translate(35, 180) scale(0.9)">
+                <circle cx="0" cy="0" r="8" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.8"></circle>
+                <circle cx="0" cy="0" r="3" fill="#E9DDBD"></circle>
+
+            </g>
+
+            <g transform="translate(55, 270) rotate(18) scale(1.2)">
+                <path d="M0,0 Q12,-15 22,-8 Q28,5 15,18 Q5,15 0,0 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.95"></path>
+                <circle cx="12" cy="5" r="3.5" fill="#E9DDBD"></circle>
+            </g>
+
+            <g transform="translate(40, 355) scale(0.95)">
+                <circle cx="0" cy="0" r="8" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.8"></circle>
+                <circle cx="0" cy="0" r="3" fill="#E9DDBD"></circle>
+            </g>
+
+            <g transform="translate(48, 440) rotate(-15) scale(1.15)">
+                <path d="M0,0 Q12,-15 22,-8 Q28,5 15,18 Q5,15 0,0 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.95"></path>
+                <circle cx="12" cy="5" r="3.5" fill="#E9DDBD"></circle>
+            </g>
+
+            <g transform="translate(58, 590) rotate(22) scale(1.1)">
+                <path d="M0,0 Q12,-15 22,-8 Q28,5 15,18 Q5,15 0,0 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.95"></path>
+                <circle cx="12" cy="5" r="3.5" fill="#E9DDBD"></circle>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Header Navigation Bar -->
+    <header class="w-full py-4 px-6 md:px-12 flex justify-between items-center z-30 border-b border-dustyrose/20 bg-ivory/85 backdrop-blur-md sticky top-0">
+        <div class="flex items-center space-x-2 flex-wrap gap-y-1">
+            <span data-editable="header-brand-title" class="font-serif text-xl md:text-2xl font-semibold tracking-wide text-warmbrown">A Tribute to Our Friendship..♡</span>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-blush text-warmbrown font-medium inline-flex items-center gap-1">
+                <i class="fa-solid fa-spa text-xs text-dustyrose"></i>
+                <span data-editable="header-edition-badge">CMRCET.❤️</span>
+            </span>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="flex items-center space-x-3">
+            <span id="chapter-indicator" data-editable="header-chapter-indicator" class="text-xs uppercase tracking-widest text-warmbrown/70 font-medium hidden sm:inline-block">Chapter 1 of 11</span>
+            <div class="w-24 sm:w-32 h-1.5 bg-blush/60 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-dustyrose transition-all duration-500 ease-out" style="width: 9.09%;"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container for Chapters -->
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8 relative z-20">
+
+        <!-- ==================== CHAPTER 1: BIRTHDAY WELCOME ==================== -->
+        <section id="chapter-1" class="chapter-section active w-full max-w-4xl flex-col items-center text-center py-12 px-4 relative">
+            <!-- Top-Left Birthday Floral & Botanical Arrangement -->
+            <svg class="botanical-corner top-0 left-0 w-48 h-48 md:w-64 md:h-64 text-dustyrose" viewBox="0 0 140 140" fill="none">
+                <path d="M10,130 Q50,80 130,10" stroke="#D8B6B0" stroke-width="2.2" stroke-linecap="round"></path>
+                <path d="M10,130 Q70,100 100,50" stroke="#A7B49A" stroke-width="1.6" stroke-linecap="round"></path>
+                <g transform="translate(110, 25) scale(1.2)">
+                    <path d="M0,15 C-8,5 -12,-5 0,-15 C12,-5 8,5 0,15 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.8"></path>
+                    <path d="M-6,10 C-15,3 -18,-3 -6,-10 C0,0 -3,8 -6,10 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.7"></path>
+                    <path d="M6,10 C15,3 18,-3 6,-10 C0,0 3,8 6,10 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.7"></path>
+                    <circle cx="0" cy="-2" r="2.5" fill="#E9DDBD"></circle>
+                </g>
+                <g transform="translate(75, 45) rotate(15) scale(1.1)">
+                    <path d="M0,0 Q12,-15 22,-8 Q28,5 15,18 Q5,15 0,0 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.9"></path>
+                    <circle cx="12" cy="5" r="3.5" fill="#E9DDBD"></circle>
+                </g>
+                <path d="M45,95 C58,82 70,100 58,112 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1"></path>
+            </svg>
+
+            <!-- Top-Right Delicate Birthday Floral Garland -->
+            <svg class="botanical-corner top-2 right-2 w-40 h-40 md:w-56 md:h-56 text-dustyrose opacity-90" viewBox="0 0 140 140" fill="none">
+                <path d="M130,120 Q85,75 15,15" stroke="#D8B6B0" stroke-width="1.8" stroke-linecap="round"></path>
+                <path d="M125,95 Q75,85 45,40" stroke="#A7B49A" stroke-width="1.4" stroke-linecap="round"></path>
+                <g transform="translate(32, 28) scale(1.05)">
+                    <path d="M0,14 C-7,5 -11,-4 0,-14 C11,-4 7,5 0,14 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.8"></path>
+                    <circle cx="0" cy="-2" r="2.5" fill="#E9DDBD"></circle>
+                </g>
+                <path d="M88,75 C75,65 68,82 80,92 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1"></path>
+            </svg>
+
+            <!-- Bottom-Left Subtle Botanical Accent -->
+            <svg class="botanical-corner bottom-2 left-2 w-36 h-36 md:w-48 md:h-48 text-dustyrose opacity-85" viewBox="0 0 140 140" fill="none">
+                <path d="M15,20 Q55,75 120,125" stroke="#A7B49A" stroke-width="1.5" stroke-linecap="round"></path>
+                <g transform="translate(95, 102) rotate(20) scale(1.0)">
+                    <path d="M0,0 Q12,-15 22,-8 Q28,5 15,18 Q5,15 0,0 Z" fill="#FFFFFF" stroke="#D8B6B0" stroke-width="0.85"></path>
+                    <circle cx="12" cy="5" r="3" fill="#E9DDBD"></circle>
+                </g>
+            </svg>
+
+            <!-- Subtle Animated Champagne & Blush Birthday Confetti -->
+            <span class="ch1-confetti-piece bg-champagne" style="top: 10%; left: 32%; animation-delay: 0s;"></span>
+            <span class="ch1-confetti-piece bg-dustyrose/70" style="top: 12%; left: 50%; animation-delay: 1.8s;"></span>
+            <span class="ch1-confetti-piece bg-sage" style="top: 8%; right: 34%; animation-delay: 3.1s;"></span>
+            <span class="ch1-confetti-piece bg-blush" style="top: 18%; left: 42%; animation-delay: 4.2s;"></span>
+            <span class="ch1-confetti-piece bg-champagne" style="top: 14%; right: 44%; animation-delay: 2.4s;"></span>
+
+            <div class="my-auto space-y-6 max-w-2xl relative z-10">
+                <!-- Decorative Champagne & Blush Birthday Crown Ornament -->
+                <div class="flex items-center justify-center gap-3 text-dustyrose/80">
+                    <span class="h-px w-10 bg-gradient-to-r from-transparent to-champagne"></span>
+                    <i class="fa-solid fa-crown text-sm text-champagne drop-shadow-xs"></i>
+                    <span class="h-px w-10 bg-gradient-to-l from-transparent to-champagne"></span>
+                </div>
+
+                <div class="floral-badge px-4 py-1.5 rounded-full bg-blush/60 border border-champagne/60 shadow-2xs">
+                    <i class="fa-solid fa-seedling text-xs text-dustyrose"></i>
+                    <span data-editable="ch1-badge">A Special Celebration</span>
+                    <i class="fa-solid fa-seedling text-xs text-dustyrose"></i>
+                </div>
+                
+                <!-- Individually Editable Heading & Birthday Girl's Name -->
+                <div class="space-y-1">
+                    <h1 data-editable="ch1-title-line1" class="font-serif text-4xl sm:text-6xl md:text-7xl font-normal text-warmbrown leading-tight">
+                        Happy Birthday!!
+                    </h1>
+                    <div class="font-serif text-4xl sm:text-6xl md:text-7xl leading-tight">
+                        <span data-editable="ch1-birthday-name" class="italic font-serif text-dustyrose font-semibold">Sri♡</span>
+                    </div>
+                </div>
+                
+                <!-- Champagne-Gold Ornamental Divider -->
+                <div class="flex items-center justify-center gap-3 my-3">
+                    <span class="h-px w-20 sm:w-28 bg-gradient-to-r from-transparent via-dustyrose to-champagne"></span>
+                    <span class="text-xs text-champagne">❖</span>
+                    <i class="fa-solid fa-spa text-xs text-dustyrose"></i>
+                    <span class="text-xs text-champagne">❖</span>
+                    <span class="h-px w-20 sm:w-28 bg-gradient-to-l from-transparent via-dustyrose to-champagne"></span>
+                </div>
+                
+                <p data-editable="ch1-subtitle" class="font-serif italic text-lg sm:text-2xl text-warmbrown/80 font-light max-w-md mx-auto leading-relaxed">
+                    "Today, a little world is made just for you ♡"
+                </p>
+
+                <p data-editable="ch1-intro-note" class="text-xs sm:text-sm text-warmbrown/65 font-light max-w-md mx-auto tracking-wide">
+                    Every chapter ahead holds a piece of our laughter, friendship, and favorite memories together.
+                </p>
+
+                <div class="pt-6 flex items-center justify-center gap-2">
+                    <button onclick="enterStory()" class="px-8 py-3.5 bg-dustyrose hover:bg-dustyrose/90 text-ivory font-serif text-lg tracking-wider rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 inline-flex items-center space-x-3 border border-champagne/40">
+                        <span data-editable="ch1-btn" data-no-auto-wrap="true">ENTER OUR STORY</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== CHAPTER 2: EVERY BEAUTIFUL STORY HAS A BEGINNING ==================== -->
+        <section id="chapter-2" class="chapter-section w-full max-w-5xl flex-col items-center py-6 px-4 relative">
+            <svg class="botanical-corner top-0 right-0 w-32 h-32 text-dustyrose" viewBox="0 0 100 100" fill="none">
+                <path d="M90,10 Q50,50 10,90" stroke="#D8B6B0" stroke-width="1.8"></path>
+                <g transform="translate(75, 20) scale(0.9)">
+                    <path d="M0,15 C-8,5 -12,-5 0,-15 C12,-5 8,5 0,15 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.8"></path>
+                    <circle cx="0" cy="-2" r="2" fill="#E9DDBD"></circle>
+                </g>
+            </svg>
+
+            <div class="text-center mb-8 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch2-badge">Chapter I</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch2-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">Every Beautiful Story Has a Beginning</h2>
+                <div class="gold-divider"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center bg-ivory/75 p-6 md:p-8 rounded-2xl border border-blush shadow-sm relative z-10 backdrop-blur-sm">
+                <div class="relative group">
+                    <div class="direct-photo-frame w-full h-80 sm:h-96 rounded-2xl overflow-hidden floral-frame bg-blush/40 relative flex items-center justify-center">
+                        <img id="img-ch2" src="images\chatting.png" alt="Our Beginning" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="inline-flex items-center space-x-2 text-xs text-olive font-semibold tracking-wider uppercase bg-sage/30 px-3 py-1 rounded-full">
+                        <i class="fa-solid fa-feather"></i>
+                        <span data-editable="ch2-tag">November Spark</span>
+                    </div>
+                    <h3 data-editable="ch2-subheading" class="font-serif text-2xl sm:text-3xl text-warmbrown">From Unknown to Unforgettable..♡</h3>
+                    <p data-editable="ch2-p1" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                        2022 November :: first week.. Hey!! Nik asl gurthu undha manam ela friends ayyamo ... nenu vere varshini ki message cheyyali ankoni nik chesa by mistake lo but ippudu aa chinna misatke valla mana Ee beautiful friendship konasaguthundhi..
+                    </p>
+                    <p data-editable="ch2-p2" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                       Oka random, anukokunda jarigina conversation-ga modalaina mana parichayam, mellaga nijamaina, sahajamaina snehamga maarindi. Anukokunda vachina aa okka message nunchi, ee roju naaku entho daggaraina friends-lo okariga maarina varaku,  Ee friendship naaku dorakadam nijangaane naa adrushtam. ❤️
+                    </p>
+                    <p data-editable="ch2-quote" class="font-serif italic text-lg text-dustyrose pt-2">
+                        "Sometimes the best chapters start by accident."
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-between w-full mt-10 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(1)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch2" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(3)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch2" data-no-auto-wrap="true">Next Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== CHAPTER 3: THOSE LITTLE COLLEGE DAYS  ==================== -->
+        <section id="chapter-3" class="chapter-section w-full max-w-6xl flex-col items-center py-6 px-4 relative">
+            <!-- Subtle Botanical Decorations Around Cards -->
+            <svg class="botanical-corner top-2 left-0 w-36 h-36 text-dustyrose opacity-75" viewBox="0 0 120 120" fill="none">
+                <path d="M10,110 Q45,65 110,10" stroke="#D8B6B0" stroke-width="1.6" stroke-linecap="round"></path>
+                <path d="M10,110 Q60,85 85,45" stroke="#A7B49A" stroke-width="1.2" stroke-linecap="round"></path>
+                <g transform="translate(92, 22) scale(0.95)">
+                    <path d="M0,15 C-8,5 -12,-5 0,-15 C12,-5 8,5 0,15 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.8"></path>
+                    <circle cx="0" cy="-2" r="2.2" fill="#E9DDBD"></circle>
+                </g>
+            </svg>
+            <svg class="botanical-corner bottom-16 right-0 w-36 h-36 text-dustyrose opacity-75" viewBox="0 0 120 120" fill="none">
+                <path d="M110,10 Q75,55 10,110" stroke="#D8B6B0" stroke-width="1.6" stroke-linecap="round"></path>
+                <path d="M55,75 C68,62 78,78 66,90 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1"></path>
+            </svg>
+
+            <div class="text-center mb-10 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch3-badge">Chapter II : 1-2 Years</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch3-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">Those Little College Days</h2>
+                <div class="gold-divider"></div>
+                <p data-editable="ch3-subtitle" class="font-serif italic text-warmbrown/75 text-lg mt-1"> The First Sparks & Unfiltered Laughter</p>
+            </div>
+
+            <!-- 4 Separate Horizontal Memory Cards with Alternating Layout & Spacious Padding -->
+            <div class="flex flex-col space-y-10 w-full relative z-10">
+
+                <!-- Card 1: Image on LEFT, Text on RIGHT -->
+                <div class="bg-ivory/90 rounded-3xl border border-blush shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-7 md:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center relative backdrop-blur-sm">
+                    <!-- Decorative Circular Icon near Upper Right Corner -->
+                    <div class="w-9 h-9 rounded-full bg-blush/50 border border-dustyrose/30 flex items-center justify-center text-dustyrose text-xs absolute top-5 right-5 z-20 shadow-xs">
+                        <i class="fa-solid fa-mug-hot"></i>
+                    </div>
+
+                    <!-- Large Rectangular Photograph (LEFT) -->
+                    <div class="md:col-span-6 h-64 sm:h-72 md:h-80 rounded-2xl bg-blush/30 overflow-hidden group border border-blush/70 shadow-xs">
+                        <div class="direct-photo-frame w-full h-full">
+                            <img id="img-ch3-1" src="images\calling.png" alt="Our First Coffee Break" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+
+                    <!-- Text Content (RIGHT) -->
+                    <div class="md:col-span-6 px-2 sm:px-3 md:pl-4 md:pr-8 py-2 flex flex-col justify-center space-y-3.5 text-left">
+                        <span data-editable="ch3-c1-label" class="text-[11px] uppercase tracking-[0.22em] text-olive font-semibold">I</span>
+                        <h3 data-editable="ch3-c1-title" class="font-serif text-2xl sm:text-3xl text-warmbrown leading-snug">Introvert Under Attack!</h3>
+                        <p data-editable="ch3-c1-desc" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                        Aa unexpected message vachina next day, mana college induction class lo oka surprising moment jarigindi.
+
+Andari mundu sudden-ga thanu "Navachaithanya..." ani naa peru pilichindi. Nenu ventane lechi chusanu. Ade nenu thanani first time direct-ga chusina moment.
+
+Tanu chala bagundi, chala innocent-ga anipinchindi. Enduko teliyadu, aa first look lone tanatho friendship cheyyali ani anipinchindi.
+
+Kaani aa moment lo naaku chala bhayam vesindi. Endukante nenu chala introvert-ni. Andari mundu sudden-ga naa peru pilavadam, andaru naa vaipu chudadam... aa situation-ni face cheyyadam naaku chala nervous-ga anipinchindi
+
+Aa roju jarigina aa chinna moment akkade mugisipoyindi. Kaani naaku teliyakundane, adi maa friendship story lo oka beautiful beginning-ga migilipoyindi.
+
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 2: Text on LEFT, Image on RIGHT -->
+                <div class="bg-ivory/90 rounded-3xl border border-blush shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-7 md:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center relative backdrop-blur-sm">
+                    <!-- Decorative Circular Icon near Upper Left Corner -->
+                    <div class="w-9 h-9 rounded-full bg-sage/50 border border-olive/30 flex items-center justify-center text-olive text-xs absolute top-5 left-5 z-20 shadow-xs">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+
+                    <!-- Text Content (LEFT) -->
+                    <div class="md:col-span-6 px-2 sm:px-3 md:pl-8 md:pr-4 pt-8 md:pt-4 pb-2 flex flex-col justify-center space-y-3.5 text-left order-2 md:order-1">
+                        <span data-editable="ch3-c2-label" class="text-[11px] uppercase tracking-[0.22em] text-dustyrose font-semibold">II</span>
+                        <h3 data-editable="ch3-c2-title" class="font-serif text-2xl sm:text-3xl text-warmbrown leading-snug">"11:56 PM – The Call That Broke My Introvert Mode!"</h3>
+                        <p data-editable="ch3-c2-desc" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                            Konni days tarvatha maa madhya chatting start ayyindi. Chatting lo thanu nannu "BRO" ani pilichedi. Starting lo ala anadam  naaku antha nachaledu. Kaani mellaga adi naaku alavataipoyindi. Tarvatha nenu kuda tanani "BRO" ani pilavadam start chesanu.
+
+Inka marchipoleni moment entante, December 31st night, 11:56 PM ki tanu naaku call chesindi. Munduga naa birthday ki wishes cheppindi. Exact-ga 12 AM ki Happy New Year kuda cheppindi.
+
+Adhi oka Crazy moment . Endukante tanu naatho phone lo matladatam ade first time. . Aa call vachinappudu naaku chala bayam ga unde endhuku ante nak m matladalo thelidhu kani lift chesi emo emo matladanu..
+
+
+                        </p>
+                    </div>
+
+                    <!-- Large Rectangular Photograph (RIGHT) -->
+                    <div class="md:col-span-6 h-64 sm:h-72 md:h-80 rounded-2xl bg-blush/30 overflow-hidden group border border-blush/70 shadow-xs order-1 md:order-2">
+                        <div class="direct-photo-frame w-full h-full">
+                            <img id="img-ch3-2" src="images\phonecall.png" alt="Late-Night Exam Prep" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Image on LEFT, Text on RIGHT -->
+                <div class="bg-ivory/90 rounded-3xl border border-blush shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-7 md:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center relative backdrop-blur-sm">
+                    <!-- Decorative Circular Icon near Upper Right Corner -->
+                    <div class="w-9 h-9 rounded-full bg-champagne/60 border border-dustyrose/30 flex items-center justify-center text-warmbrown text-xs absolute top-5 right-5 z-20 shadow-xs">
+                        <i class="fa-solid fa-shoe-prints"></i>
+                    </div>
+
+                    <!-- Large Rectangular Photograph (LEFT) -->
+                    <div class="md:col-span-6 h-64 sm:h-72 md:h-80 rounded-2xl bg-blush/30 overflow-hidden group border border-blush/70 shadow-xs">
+                        <div class="direct-photo-frame w-full h-full">
+                            <img id="img-ch3-3" src="images\rakhi.png" alt="Spontaneous Walks" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+
+                    <!-- Text Content (RIGHT) -->
+                    <div class="md:col-span-6 px-2 sm:px-3 md:pl-4 md:pr-8 py-2 flex flex-col justify-center space-y-3.5 text-left">
+                        <span data-editable="ch3-c3-label" class="text-[11px] uppercase tracking-[0.22em] text-olive font-semibold">III</span>
+                        <h3 data-editable="ch3-c3-title" class="font-serif text-2xl sm:text-3xl text-warmbrown leading-snug">"She Tied, I Froze!"</h3>
+                        <p data-editable="ch3-c3-desc" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                            Maa friendship chatting and calls dwara mellaga continue avutunna rojullo, maaku EEP Lab External  Exam Tharvatha maa team antha presentation practice chestunnam.
+
+Appude sudden-ga Srivarshini naa daggariki vachi naaku Rakhi kattindi. Aa moment maa friends andariki pedda surprise! Andaru shock ayipoyaru. Maa friends aa moment-ni video teesi, tarvatha nannu konchem sepu aatapattincharu.
+
+Thanu naaku Rakhi kattutunnappudu naa hands and legs shake avutunnayi. Asalu em matladalo, ela react avvalo kuda naaku artham kaaledu. Maa friends "Kallu mokku ra!" ani tease chesaru, kaani aa moment  lo nenu em cheyyalo kuda marchipoyanu.
+
+Tarvatha Krishnapriya dwara tanaki oka chocolate pampinchanu. Tanu aa chocolate teesukundi. Appatiki naaku ade chaalu anipinchindi, endukante aa moment lo inka em cheyyalo naaku assalu artham kaaledu.😂
+
+
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Text on LEFT, Image on RIGHT -->
+                <div class="bg-ivory/90 rounded-3xl border border-blush shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-7 md:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center relative backdrop-blur-sm">
+                    <!-- Decorative Circular Icon near Upper Left Corner -->
+                    <div class="w-9 h-9 rounded-full bg-blush/50 border border-dustyrose/30 flex items-center justify-center text-dustyrose text-xs absolute top-5 left-5 z-20 shadow-xs">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+
+                    <!-- Text Content (LEFT) -->
+                    <div class="md:col-span-6 px-2 sm:px-3 md:pl-8 md:pr-4 pt-8 md:pt-4 pb-2 flex flex-col justify-center space-y-3.5 text-left order-2 md:order-1">
+                        <span data-editable="ch3-c4-label" class="text-[11px] uppercase tracking-[0.22em] text-dustyrose font-semibold">IV</span>
+                        <h3 data-editable="ch3-c4-title" class="font-serif text-2xl sm:text-3xl text-warmbrown leading-snug">The Dinner I Almost Missed! 😂❤️</h3>
+                        <p data-editable="ch3-c4-desc" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                            November 21st, 2025… ❤️
+
+Adi ma Friendship lo  first time dinner chesina roju. Adi kuda tana birthday party!
+
+Aa roju Srivarshini, tana friend Sameera and Sai kuda vacharu. Tanu nannu dinner ki rammani chala chala request chesindi. Chala sarlu calls kuda chesindi. Naaku vellalani chala unna, enduko teliyani bhayam kuda undedi.
+
+Anduke naaku konchem dhairyam ga untundani, Srivarshini ki naaku mutual friend aina Srivardhan ni nak thoduga teesukoni vellanu.
+
+Cake cutting celebration ayyaka, tanu mammalni "ThinesPo Cafe and Restaurant" ki teesukellindi. Thanu vegetarian kabatti Paneer  thinnadhi, memu Biryani order chesam.
+
+Kaani nijam cheppalante, aa roju naaku Biryani assalu nachaledu. Chala worst ga anipinchindi! 😂
+
+
+
+Food antha special ga lekapoyina, Aa memory bagundhi...
+
+
+                        </p>
+                    </div>
+
+                    <!-- Large Rectangular Photograph (RIGHT) -->
+                    <div class="md:col-span-6 h-64 sm:h-72 md:h-80 rounded-2xl bg-blush/30 overflow-hidden group border border-blush/70 shadow-xs order-1 md:order-2">
+                        <div class="direct-photo-frame w-full h-full">
+                            <img id="img-ch3-4" src="images\firstdinner.png" alt="Unconditional Support" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex justify-between w-full mt-10 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(2)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch3" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(4)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch3" data-no-auto-wrap="true">Next Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== CHAPTER 4: CONTINUING OUR COLLEGE CHAPTER (PART 2A) ==================== -->
+        <section id="chapter-4" class="chapter-section w-full max-w-6xl flex-col items-center py-6 px-4 relative">
+            <!-- Subtle Botanical Decorations Around Cards -->
+            <svg class="botanical-corner top-2 right-0 w-36 h-36 text-dustyrose opacity-75" viewBox="0 0 120 120" fill="none">
+                <path d="M110,110 Q75,65 10,10" stroke="#D8B6B0" stroke-width="1.6" stroke-linecap="round"></path>
+                <g transform="translate(28, 22) scale(0.95)">
+                    <path d="M0,15 C-8,5 -12,-5 0,-15 C12,-5 8,5 0,15 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="0.8"></path>
+                    <circle cx="0" cy="-2" r="2.2" fill="#E9DDBD"></circle>
+                </g>
+            </svg>
+            <svg class="botanical-corner bottom-16 left-0 w-36 h-36 text-dustyrose opacity-75" viewBox="0 0 120 120" fill="none">
+                <path d="M10,10 Q45,55 110,110" stroke="#D8B6B0" stroke-width="1.6" stroke-linecap="round"></path>
+                <path d="M65,75 C52,62 42,78 54,90 Z" fill="#DCE6D7" stroke="#A7B49A" stroke-width="1"></path>
+            </svg>
+
+            <div class="text-center mb-10 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch4-badge">Chapter II: 3-4 Years</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch4-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">Continuing Our College Chapter</h2>
+                <div class="gold-divider"></div>
+                <p data-editable="ch4-subtitle" class="font-serif italic text-warmbrown/75 text-lg mt-1">More Adventures, Deeper Bonds ..</p>
+            </div>
+
+            <!-- 4 Separate Horizontal Memory Cards with Alternating Layout & Spacious Padding -->
+            <div class="flex flex-col space-y-10 w-full relative z-10">
+
+                <!-- Card 1: Image on LEFT, Text on RIGHT -->
+                <div class="bg-ivory/90 rounded-3xl border border-blush shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-7 md:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center relative backdrop-blur-sm">
+                    <!-- Decorative Circular Icon near Upper Right Corner -->
+                    <div class="w-9 h-9 rounded-full bg-champagne/60 border border-dustyrose/30 flex items-center justify-center text-warmbrown text-xs absolute top-5 right-5 z-20 shadow-xs">
+                        <i class="fa-solid fa-sparkles"></i>
+                    </div>
+
+                    <!-- Large Rectangular Photograph (LEFT) -->
+                    <div class="md:col-span-6 h-64 sm:h-72 md:h-80 rounded-2xl bg-blush/30 overflow-hidden group border border-blush/70 shadow-xs">
+                        <div class="direct-photo-frame w-full h-full">
+                            <img id="img-ch4-1" src="images\temple.png" alt="Festivals & Celebrations" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+
+                    <!-- Text Content (RIGHT) -->
+                    <div class="md:col-span-6 px-2 sm:px-3 md:pl-4 md:pr-8 py-2 flex flex-col justify-center space-y-3.5 text-left">
+                        <span data-editable="ch4-c1-label" class="text-[11px] uppercase tracking-[0.22em] text-olive font-semibold">V</span>
+                        <h3 data-editable="ch4-c1-title" class="font-serif text-2xl sm:text-3xl text-warmbrown leading-snug">"God's Place, Our Crazy Day!"</h3>
+                        <p data-editable="ch4-c1-desc" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                            April 18th… ❤️
+
+Adi ma Friendship lo vellina  first Temple trip. Sri Edupayala Vana Durga Bhavani Temple ki vellam.
+
+Akkadiki cherukunnaka, munduga ammavarini darshinchukunnam. Aa tarvatha maa friends tho kalisi akkada chala enjoy chesam. Dance chesam Srivarshini nv ayihe dance vere level asl 😂
+
+Akkade memantha kalisi vantalu chesukoni, andaram kalisi tinnaam. Friends tho saradaga time spend chesthu, aa roju ni chala happy ga enjoy chesam.
+
+Ala oka beautiful day, manchi memories tho mugisindi. ❤️
+
+                    </div>
+                </div>
+
+                <!-- Card 2: Text on LEFT, Image on RIGHT -->
+                <div class="bg-ivory/90 rounded-3xl border border-blush shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-7 md:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center relative backdrop-blur-sm">
+                    <!-- Decorative Circular Icon near Upper Left Corner -->
+                    <div class="w-9 h-9 rounded-full bg-blush/50 border border-dustyrose/30 flex items-center justify-center text-dustyrose text-xs absolute top-5 left-5 z-20 shadow-xs">
+                        <i class="fa-solid fa-face-laugh-beam"></i>
+                    </div>
+
+                    <!-- Text Content (LEFT) -->
+                    <div class="md:col-span-6 px-2 sm:px-3 md:pl-8 md:pr-4 pt-8 md:pt-4 pb-2 flex flex-col justify-center space-y-3.5 text-left order-2 md:order-1">
+                        <span data-editable="ch4-c2-label" class="text-[11px] uppercase tracking-[0.22em] text-dustyrose font-semibold">VI</span>
+                        <h3 data-editable="ch4-c2-title" class="font-serif text-2xl sm:text-3xl text-warmbrown leading-snug">No Sleep, Just Memories! 🌙</h3>
+                        <p data-editable="ch4-c2-desc" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+B.Tech 4th Year, 2nd Semester… Maa college journey ending days lo memu night out vellinam!!
+
+Munduga memu Tank Bund ki vellam. Akkada beautiful views chusthu, Buddha Statue and Secretariat ni enjoy chesam. Aa place lo atmosphere chala bagundi. Konni reels kuda chesi, friends tho full fun chesam.
+
+Tarvatha akkadi nunchi Durgam Cheruvu Cable Bridge ki vellam. Akkada lights, bridge view chala beautiful-ga unnayi. Andaram kalisi akkada kuda chala enjoy chesam.
+
+Finally, akkadi nunchi Lakdikapul ki velli, chai taguthu maa night out ni continue chesam. Ala night antha friends tho tiruguthu, navvuthu, enjoy chesthu oka beautiful memory create chesukunnam.
+
+College days lo chesina aa first night out… eppatiki marchipoleni memory! ❤️
+
+                        </p>
+                    </div>
+
+                    <!-- Large Rectangular Photograph (RIGHT) -->
+                    <div class="md:col-span-6 h-64 sm:h-72 md:h-80 rounded-2xl bg-blush/30 overflow-hidden group border border-blush/70 shadow-xs order-1 md:order-2">
+                        <div class="direct-photo-frame w-full h-full">
+                            <img id="img-ch4-2" src="images\outing.png" alt="Secret Eye Contact" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Image on LEFT, Text on RIGHT -->
+                <div class="bg-ivory/90 rounded-3xl border border-blush shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-7 md:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center relative backdrop-blur-sm">
+                    <!-- Decorative Circular Icon near Upper Right Corner -->
+                    <div class="w-9 h-9 rounded-full bg-sage/50 border border-olive/30 flex items-center justify-center text-olive text-xs absolute top-5 right-5 z-20 shadow-xs">
+                        <i class="fa-solid fa-cloud-rain"></i>
+                    </div>
+
+                    <!-- Large Rectangular Photograph (LEFT) -->
+                    <div class="md:col-span-6 h-64 sm:h-72 md:h-80 rounded-2xl bg-blush/30 overflow-hidden group border border-blush/70 shadow-xs">
+                        <div class="direct-photo-frame w-full h-full">
+                            <img id="img-ch4-3" src="images\signature.png" alt="Rainy Campus Evenings" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+
+                    <!-- Text Content (RIGHT) -->
+                    <div class="md:col-span-6 px-2 sm:px-3 md:pl-4 md:pr-8 py-2 flex flex-col justify-center space-y-3.5 text-left">
+                        <span data-editable="ch4-c3-label" class="text-[11px] uppercase tracking-[0.22em] text-olive font-semibold">VII</span>
+                        <h3 data-editable="ch4-c3-title" class="font-serif text-2xl sm:text-3xl text-warmbrown leading-snug">“Expected a Paragraph, Got Two Words! 🤣”</h3>
+                        <p data-editable="ch4-c3-desc" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                            April 1st, 2025… !!
+
+Adi maa college lo Signature Day. Aa roju memu chala photos teesukunnam, friends tho enjoy chesam. Andaram okari T-shirts meeda okaram messages, signatures raasukuntu aa day ni special ga celebrate chesam.
+
+Nijam cheppalante, naa T-shirt meeda tanu chala matter raastundani anukunnanu. Endukante appatike mem chala close ayyamu edho expect chesa kani Dolla m ledhu  m rayaledhu...
+
+Kaani thanu naa T-shirt paina simple-ga "Forever Bestie"ani raasindi. Waste moham dhi....!!
+
+
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Text on LEFT, Image on RIGHT -->
+                <div class="bg-ivory/90 rounded-3xl border border-blush shadow-sm hover:shadow-md transition-all duration-300 p-5 sm:p-7 md:p-9 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 md:gap-12 items-center relative backdrop-blur-sm">
+                    <!-- Decorative Circular Icon near Upper Left Corner -->
+                    <div class="w-9 h-9 rounded-full bg-champagne/60 border border-dustyrose/30 flex items-center justify-center text-warmbrown text-xs absolute top-5 left-5 z-20 shadow-xs">
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+
+                    <!-- Text Content (LEFT) -->
+                    <div class="md:col-span-6 px-2 sm:px-3 md:pl-8 md:pr-4 pt-8 md:pt-4 pb-2 flex flex-col justify-center space-y-3.5 text-left order-2 md:order-1">
+                        <span data-editable="ch4-c4-label" class="text-[11px] uppercase tracking-[0.22em] text-dustyrose font-semibold">VIII</span>
+                        <h3 data-editable="ch4-c4-title" class="font-serif text-2xl sm:text-3xl text-warmbrown leading-snug">"The Last Goodbye, The Forever Memories ❤️"</h3>
+                        <p data-editable="ch4-c4-desc" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                            June 11, 2026 – The day our B.Tech journey came to an end.
+ B.Tech life ended, but the memories and friendships will always stay in my heart.
+
+
+
+                        </p>
+                    </div>
+
+                    <!-- Large Rectangular Photograph (RIGHT) -->
+                    <div class="md:col-span-6 h-64 sm:h-72 md:h-80 rounded-2xl bg-blush/30 overflow-hidden group border border-blush/70 shadow-xs order-1 md:order-2">
+                        <div class="direct-photo-frame w-full h-full">
+                            <img id="img-ch4-4" src="images\graduation.png" alt="Growing Into Best Friends" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="flex justify-between w-full mt-10 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(3)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch4" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(5)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch4" data-no-auto-wrap="true">Next Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== CHAPTER 5: A BIRTHDAY WE CELEBRATED TOGETHER ==================== -->
+        <section id="chapter-5" class="chapter-section w-full max-w-5xl flex-col items-center py-6 px-4 relative">
+            <div class="text-center mb-8 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch5-badge">Chapter III</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch5-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">Two Birthdays Filled with Friendship❤️</h2>
+                <div class="gold-divider"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center bg-ivory/75 p-6 md:p-8 rounded-2xl border border-blush shadow-sm relative z-10 backdrop-blur-sm">
+                <div class="space-y-4 order-2 md:order-1">
+                    <div class="inline-flex items-center space-x-2 text-xs text-dustyrose font-semibold tracking-wider uppercase bg-blush/40 px-3 py-1 rounded-full">
+                        <i class="fa-solid fa-cake-candles"></i>
+                        <span data-editable="ch5-tag">Golden Memory</span>
+                    </div>
+                    <h3 data-editable="ch5-subheading" class="font-serif text-2xl sm:text-3xl text-warmbrown">That Unforgettable Celebration</h3>
+
+                    <p data-editable="ch5-p1" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                        November-21-2025::
+
+Hey sri!! Aa roju ni kosam oka manchi instagram story pettanu 10 mins kindha midha padi edit chesi pettanu and evng nv cl chesi  nannu invite chesav celebrations lo join avvadaniki actually nak ravalani unde kani dhani kanna ekkuva ga bayam ga kuda unde ndhuku ante ni birthday nen celebrate cheyyadam adhe first time koncham nervous kuda feel ayyanu nv anni times cl chesi intive chesav kabbati mana friend Srivardhan ni thisksoni ochanu nak koncham dhairyam kosam akkadiki ochinaka twist enti ante miru thintunnam aypoyindhi ani abadham chepparu kani mem oche varaku inka thinaledhu miru asl order hey cheyyale... nv oka waste moham vii nen ochi kurchovadame pedha task ante matladu endhuku silent adhi idhi annav iga bayam tho nervours feeling tho ala thinadam ayithe complete chesa next sunt enti ante cake cut kompally-Cake cornor lo celebrate chesam successfully oka pedha gandam gattu ekkanu anipinchindhi.. 🤣 
+                    </p>
+                    <p data-editable="ch5-p2" class="text-sm sm:text-base text-warmbrown/80 leading-relaxed font-light">
+                       December-31-2025::
+
+chii chii story ela pedthav ani expect chesa oka rangeee Hero madhirii pedthav ankunna kani just "Happy Birthday Bro" ni pettav nak nachale iga badha ki nachinchi anna atleast subbu ani ayina pedthav ankunna ledhu Dolla..! Evng medchal -Brown Bear bakery lo na Birthday celebrate chesav Thank you ❤️ kani nv celebrate cheyyadaniki ochinava ledha photos click cheskoni instagram story pettadaniki ochava..?? inka dawath istha ante vellipoyav odhu next time chudham mak late avthundhi ani edo sodhi cheppinav Escape ayinav..
+
+
+                    </p>
+                    <p data-editable="ch5-quote" class="font-serif italic text-lg text-olive pt-2">
+                       "kani Ee Two Birthdays mana Friendship jarigina first Celebrations..🎉🥳"
+                    </p>
+                </div>
+
+                <div class="relative group order-1 md:order-2">
+                    <div class="direct-photo-frame w-full h-80 sm:h-96 rounded-2xl overflow-hidden floral-frame bg-champagne/40 relative flex items-center justify-center">
+                        <img id="img-ch5" src="images\birthdayy1.png" alt="Birthday Memory" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between w-full mt-10 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(4)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch5" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(6)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch5" data-no-auto-wrap="true">Next Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== CHAPTER 6: A LETTER FROM MY HEART ==================== -->
+        <section id="chapter-6" class="chapter-section w-full max-w-4xl flex-col items-center py-6 px-4 relative">
+            <div class="text-center mb-8 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch6-badge">Chapter IV</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch6-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">A Letter From Your BestFriend!</h2>
+                <div class="gold-divider"></div>
+                <p id="envelope-instruction" data-editable="ch6-instruction" class="text-sm text-warmbrown/70 mt-2 font-light">Click the envelope below to open your birthday letter</p>
+            </div>
+
+            <!-- Interactive Envelope -->
+            <div class="envelope-wrapper my-4 flex flex-col items-center relative z-10">
+                <div id="envelope" onclick="openEnvelope()" class="envelope flex items-center justify-center">
+                    <div class="envelope-flap"></div>
+                    <div class="w-12 h-12 rounded-full bg-ivory shadow-md flex items-center justify-center z-10 text-dustyrose text-xl border border-dustyrose/30 transition-transform hover:scale-110">
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <span data-editable="ch6-envelope-label" class="absolute bottom-4 font-serif italic text-warmbrown/70 text-sm">For Sri Varshini</span>
+                </div>
+            </div>
+
+            <!-- Letter Paper Content -->
+            <div id="letter-content" class="letter-content w-full max-w-2xl bg-ivory/95 p-6 sm:p-10 rounded-2xl shadow-lg border border-dustyrose/30 mt-6 relative z-10">
+                <svg class="botanical-corner top-3 right-3 w-16 h-16 text-dustyrose/30" viewBox="0 0 60 60" fill="none">
+                    <path d="M50,10 Q30,30 10,50" stroke="#D8B6B0" stroke-width="1"></path>
+                    <g transform="translate(45, 15) scale(0.6)">
+                        <path d="M0,15 C-8,5 -12,-5 0,-15 C12,-5 8,5 0,15 Z" fill="#F0DEDC" stroke="#D8B6B0" stroke-width="1"></path>
+                    </g>
+                </svg>
+                
+                <div class="font-serif text-warmbrown space-y-4 text-base sm:text-lg leading-relaxed">
+                    <p data-editable="ch6-letter-salutation" class="text-xl sm:text-2xl font-semibold text-warmbrown"> My Dearest BestFriend Sri Varshini❤️</p>
+                    
+                    <p data-editable="ch6-letter-p1">
+                        Nijam cheppalante, mana friendship ela start ayyindo taluchukunte ippatiki naaku chala surprising-ga anipistundi. Oka unexpected message tho start aina mana conversation, mellaga oka beautiful friendship-ga maarutundani appudu nenu assalu expect cheyyaledu.
+                    </p>
+                    
+                    <p data-editable="ch6-letter-p2">
+                       B.Tech journey lo chala mandi friends parichayam ayyaru. Kaani vallandarilo nuvvu matram naaku oka unexpected and special friend-ga migilipoyavu and 
+
+Thanks for sending maths home work nv chesina ee help valla class lo punishment thappedhi..  kani ni mohaniki oka lab record,assignment kuda 4 years lo okasari kuda rayalev.. 
+                    
+                    <p data-editable="ch6-letter-p3">
+    
+
+Mana friendship lo konni moments chala funny-ga untayi. Ela ante night antha chala baga chat cheyyadam kani college lo Edhuru avvagane nuvvu evaro nenu evaro annatu undevallam..😂 nak face to face matladadam radhu nak bayam adhi nik kuda thelusu..
+                    
+                    <p data-editable="ch6-letter-p4" class="pt-4">
+                      Oka vishayam matram cheppali… Nenu konnisarlu introvert-la behave chesi undochu, konnisarlu sarigga express cheyyalekapoyi undochu. Kaani Ne friendship dhorakadam na adhrustam.
+<p data-editable="ch6-letter-p4" class="pt-5">
+B.Tech complete ayyindi. College days aipoyayi. Daily kalusukune rojulu kuda taggipoyayi. Kaani mana friendship ilane Life Long konasagalii...!!</p>
+<p data-editable="ch6-letter-p4" class="pt-6">
+Future lo manam entha busy-ga unna, ekkada unna, mana madhya unna ee bond ilage undalani korukuntunnanu...❤️</p>
+<p data-editable="ch6-letter-p4" class="pt-7">
+kani na life lo okasari ayina nik "ICE-APPLES" thiskochi istha college days lo chala sarlu adigav kani nak kudharaledhu..!!</p>
+
+Finally, thank you for entering my life unexpectedly and becoming one of its most beautiful memories.
+                    </p>
+                    
+                    <div class="pt-6">
+                        <p data-editable="ch6-letter-signoff" class="italic text-warmbrown/80">With all my love and gratitude,</p>
+                        <p data-editable="ch6-letter-signature" class="font-handwriting text-3xl text-dustyrose mt-1">Your Best Friend Forever -Subbu♡</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between w-full mt-10 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(5)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch6" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(7)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch6" data-no-auto-wrap="true">Next Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        </section>
+
+
+        <!-- ==================== CHAPTER 7: MAKE A WISH, BIRTHDAY GIRL ==================== -->
+        <section id="chapter-7" class="chapter-section w-full max-w-4xl flex-col items-center text-center py-6 px-4 relative">
+            <div class="text-center mb-6 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch7-badge">Chapter V</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch7-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">Make a Wish, Birthday Girl!</h2>
+                <div class="gold-divider"></div>
+                <p data-editable="ch7-subtitle" class="text-sm text-warmbrown/70 mt-2 font-light">Close your eyes, make your purest wish, and blow the candle.</p>
+            </div>
+
+            <!-- Minimalist Aesthetic Cake with Lotus & Datura Aesthetic -->
+            <div class="my-8 flex flex-col items-center justify-center relative z-10">
+                <div class="relative flex flex-col items-center">
+                    <div id="smoke-container" class="relative h-6 w-6 flex justify-center items-end">
+                        <div id="candle-flame" class="flame"></div>
+                    </div>
+                    <div class="w-2.5 h-10 bg-gradient-to-b from-champagne to-dustyrose rounded-t-sm shadow-sm"></div>
+                    <div class="w-36 sm:w-48 h-12 bg-blush rounded-t-2xl border-b-2 border-dustyrose/30 shadow-inner relative flex items-center justify-center">
+                        <div class="w-full flex justify-around px-2">
+                            <span class="w-2.5 h-3 bg-ivory rounded-b-full"></span>
+                            <span class="w-2.5 h-4 bg-ivory rounded-b-full"></span>
+                            <span class="w-2.5 h-3 bg-ivory rounded-b-full"></span>
+                            <span class="w-2.5 h-4 bg-ivory rounded-b-full"></span>
+                        </div>
+                    </div>
+                    <div class="w-48 sm:w-60 h-16 bg-ivory border-2 border-blush rounded-t-xl shadow-md flex items-center justify-center">
+                        <span data-editable="ch7-cake-name" class="font-handwriting text-2xl text-dustyrose">Sri ♡</span>
+                    </div>
+                    <div class="w-60 sm:w-72 h-3 bg-champagne rounded-full shadow"></div>
+                </div>
+
+                <div class="mt-8 flex items-center justify-center gap-2">
+                    <button id="wish-btn" onclick="blowCandle()" class="px-8 py-3 bg-olive hover:bg-olive/90 text-ivory font-serif text-lg tracking-wider rounded-full shadow-md transition-all duration-300 transform hover:-translate-y-0.5 inline-flex items-center space-x-2">
+                        <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+                        <span data-editable="ch7-wish-btn" data-no-auto-wrap="true">MAKE A WISH</span>
+                    </button>
+                </div>
+
+                <div id="wish-celebration" class="hidden mt-6 max-w-md bg-blush/40 p-6 rounded-2xl border border-dustyrose/30 transition-all duration-500">
+                    <p data-editable="ch7-wish-msg" class="font-serif italic text-xl sm:text-2xl text-warmbrown">
+                        "May every dream in your heart bloom into reality this year, Sri ! Happy Birthday! ✨🎂"
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-between w-full mt-8 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(6)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch7" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(8)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch7" data-no-auto-wrap="true">Next Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== CHAPTER 8: MEMORIES I WANT TO KEEP FOREVER ==================== -->
+        <section id="chapter-8" class="chapter-section w-full max-w-6xl flex-col items-center py-6 px-4 relative">
+            <div class="text-center mb-8 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch8-badge">Chapter VI</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch8-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">Memories I Want to Keep Forever</h2>
+                <div class="gold-divider"></div>
+                <p data-editable="ch8-subtitle" class="text-sm text-warmbrown/70 mt-2 font-light">A Polaroid gallery of our timeless moments</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full relative z-10">
+                <!-- Polaroid 1 -->
+                <div class="bg-white p-3 rounded-xl shadow-md border border-blush/60 transform transition hover:-translate-y-1">
+                    <div class="direct-photo-frame h-48 bg-ivory relative overflow-hidden rounded-lg group">
+                        <img id="img-pol-1" src="images\farewell.png" alt="Polaroid 1" class="w-full h-full object-cover">
+                    </div>
+                    <p data-editable="ch8-pol1" class="font-handwriting text-2xl text-center text-warmbrown mt-3">3rd Year Farewel..🩷</p>
+                </div>
+
+                <!-- Polaroid 2 -->
+                <div class="bg-white p-3 rounded-xl shadow-md border border-blush/60 transform transition hover:-translate-y-1">
+                    <div class="direct-photo-frame h-48 bg-ivory relative overflow-hidden rounded-lg group">
+                        <img id="img-pol-2" src="images\rakhi.png" alt="Polaroid 2" class="w-full h-full object-cover">
+                    </div>
+                    <p data-editable="ch8-pol2" class="font-handwriting text-2xl text-center text-warmbrown mt-3">Rakshabandhan..🍫</p>
+                </div>
+
+                <!-- Polaroid 3 -->
+                <div class="bg-white p-3 rounded-xl shadow-md border border-blush/60 transform transition hover:-translate-y-1">
+                    <div class="direct-photo-frame h-48 bg-ivory relative overflow-hidden rounded-lg group">
+                        <img id="img-pol-3" src="images\asthetic.png" alt="Polaroid 3" class="w-full h-full object-cover">
+                    </div>
+                    <p data-editable="ch8-pol3" class="font-handwriting text-2xl text-center text-warmbrown mt-3">Unfiltered Joy..🥳</p>
+                </div>
+
+                <!-- Polaroid 4 -->
+
+                <div class="bg-white p-3 rounded-xl shadow-md border border-blush/60 transform transition hover:-translate-y-1">
+                    <div class="direct-photo-frame h-48 bg-ivory relative overflow-hidden rounded-lg group">
+                        <img id="img-pol-4" src="images\snaps.png" alt="Polaroid 4" class="w-full h-full object-cover">
+                    </div>
+                    <p data-editable="ch8-pol4" class="font-handwriting text-2xl text-center text-warmbrown mt-3">Presentation Snaps..🤳</p>
+                </div>
+
+                <!-- Polaroid 5 -->
+                <div class="bg-white p-3 rounded-xl shadow-md border border-blush/60 transform transition hover:-translate-y-1">
+                    <div class="direct-photo-frame h-48 bg-ivory relative overflow-hidden rounded-lg group">
+                        <img id="img-pol-5" src="images\creamstone.png" alt="Polaroid 5" class="w-full h-full object-cover">
+                    </div>
+                    <p data-editable="ch8-pol5" class="font-handwriting text-2xl text-center text-warmbrown mt-3">Ice Cream Night..🍧</p>
+                </div>
+
+                <!-- Polaroid 6 -->
+                <div class="bg-white p-3 rounded-xl shadow-md border border-blush/60 transform transition hover:-translate-y-1">
+                    <div class="direct-photo-frame h-48 bg-ivory relative overflow-hidden rounded-lg group">
+                        <img id="img-pol-6" src="images\temple.png" alt="Polaroid 6" class="w-full h-full object-cover">
+                    </div>
+                    <p data-editable="ch8-pol6" class="font-handwriting text-2xl text-center text-warmbrown mt-3">Joyful Day..🥳</p>
+                </div>
+
+                <!-- Polaroid 7 -->
+                <div class="bg-white p-3 rounded-xl shadow-md border border-blush/60 transform transition hover:-translate-y-1">
+                    <div class="direct-photo-frame h-48 bg-ivory relative overflow-hidden rounded-lg group">
+                        <img id="img-pol-7" src="images\simple.png" alt="Polaroid 7" class="w-full h-full object-cover">
+                    </div>
+                    <p data-editable="ch8-pol7" class="font-handwriting text-2xl text-center text-warmbrown mt-3">Signature Day..🖋️</p>
+                </div>
+
+                <!-- Polaroid 8 -->
+                <div class="bg-white p-3 rounded-xl shadow-md border border-blush/60 transform transition hover:-translate-y-1">
+                    <div class="direct-photo-frame h-48 bg-ivory relative overflow-hidden rounded-lg group">
+                        <img id="img-pol-8" src="images\graduation.png" alt="Polaroid 8" class="w-full h-full object-cover">
+                    </div>
+                    <p data-editable="ch8-pol8" class="font-handwriting text-2xl text-center text-warmbrown mt-3">Graduation🎓</p>
+                </div>
+            </div>
+
+            <div class="flex justify-between w-full mt-10 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(7)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch8" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(9)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch8" data-no-auto-wrap="true">Next Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== CHAPTER 9: WAIT... THERE'S ONE MORE THING! ==================== -->
+        <section id="chapter-9" class="chapter-section w-full max-w-4xl flex-col items-center text-center py-6 px-4 relative">
+            <div class="text-center mb-8 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch9-badge">Chapter VII</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch9-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">Wait... There's One More Thing!</h2>
+                <div class="gold-divider"></div>
+                <p data-editable="ch9-subtitle" class="text-sm text-warmbrown/70 mt-2 font-light">A little Message hidden just for you...</p>
+            </div>
+
+            <div class="my-6 flex flex-col items-center justify-center w-full max-w-xl relative z-10">
+                <div class="flex items-center justify-center gap-2">
+                    <button id="reveal-surprise-btn" onclick="revealPlotTwist()" class="px-8 py-4 bg-dustyrose hover:bg-dustyrose/90 text-ivory font-serif text-lg sm:text-xl tracking-wider rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 inline-flex items-center space-x-3">
+                        <i class="fa-solid fa-sparkles text-sm"></i>
+                        <span data-editable="ch9-reveal-btn" data-no-auto-wrap="true">The Friendship Contract</span>
+                    </button>
+                </div>
+
+                <!-- Plot Twist Card: Completely hidden initially until clicked -->
+                <div id="plot-twist-card" class="hidden mt-8 bg-ivory/95 p-8 sm:p-10 rounded-3xl border border-dustyrose/40 shadow-xl space-y-4 backdrop-blur-md">
+                    <div class="w-12 h-12 rounded-full bg-blush/60 flex items-center justify-center mx-auto text-dustyrose text-xl mb-2">
+                        <i class="fa-solid fa-wand-sparkles"></i>
+                    </div>
+                    <p data-editable="ch9-twist-text" class="font-serif text-xl sm:text-2xl md:text-3xl text-warmbrown leading-relaxed">
+                        "Congratulations...🎉"
+                    </p>
+                    <p data-editable="ch9-twist-text" class="font-serif text-xl sm:text-2xl md:text-3xl text-warmbrown leading-relaxed">
+                        You have officicially been selected for lifetime Subcription..
+                    </p>
+                    <p data-editable="ch9-twist-text" class="font-serif text-xl sm:text-2xl md:text-3xl text-warmbrown leading-relaxed">
+                       Aa  subscription enti ante nuvvu natho life time free ga Friendship cheyyochu.. inkoti Hey nen cheyyanu naku subscription odhu ane options niku levu amma ..Gammuna undi natho Friendship cheyyu anthe..kadhu kudadhu ante thelusu kadha Dhavda palguthadhi..!
+                    </p>
+                    <div class="gold-divider"></div>
+                    <p data-editable="ch9-twist-footer" class="font-serif italic text-lg sm:text-xl text-olive font-medium">
+                        ♡ Pure Friendship ♡
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex justify-between w-full mt-10 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(8)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch9" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(10)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch9" data-no-auto-wrap="true">Next Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ==================== CHAPTER 10: ONE SMALL REQUEST, SRI... ==================== -->
+        <section id="chapter-10" class="chapter-section w-full max-w-4xl flex-col items-center text-center py-6 px-4 relative">
+            <div class="text-center mb-8 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch10-badge">Chapter VIII</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch10-heading" class="font-serif text-3xl sm:text-4xl md:text-5xl text-warmbrown font-normal mt-1">One Small Request, Sri...</h2>
+                <div class="gold-divider"></div>
+            </div>
+
+            <div class="my-6 flex flex-col items-center justify-center w-full max-w-xl relative z-10">
+                <!-- Interactive Gift-Opening Button -->
+                <div id="open-gift-btn-wrapper" class="flex items-center justify-center gap-2">
+                    <button id="open-gift-btn" onclick="openPS5Gift()" class="px-8 py-4 bg-gradient-to-r from-dustyrose to-olive hover:opacity-95 text-ivory font-serif text-lg sm:text-xl tracking-wider rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 inline-flex items-center space-x-3">
+                        <span data-editable="ch10-gift-btn" data-no-auto-wrap="true">OPEN YOUR GIFT 🎁</span>
+                    </button>
+                </div>
+
+                <!-- Hidden PS5 Gift Surprise Card -->
+                <div id="ps5-gift-card" class="hidden mt-8 bg-ivory/95 p-8 sm:p-10 rounded-3xl border-2 border-champagne shadow-2xl space-y-6 backdrop-blur-md w-full">
+                    <div class="w-16 h-16 rounded-full bg-champagne/50 flex items-center justify-center mx-auto text-warmbrown text-3xl shadow-inner">
+                        🎮
+                    </div>
+                    <p data-editable="ch10-gift-msg" data-html="true" class="font-serif text-xl sm:text-2xl md:text-3xl text-warmbrown leading-relaxed">
+                        Your birthday gift is ready... Now, what about mine?<br>
+                        <span class="font-semibold text-dustyrose">Please buy me a PS5 for my birthday! 😂🎮</span><br>
+                        Deal?
+                    </p>
+
+                    <div id="ps5-response-buttons" class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                        <div class="flex items-center gap-1.5 w-full sm:w-auto justify-center">
+                            <button onclick="acceptPS5Deal('ch10-btn-opt1')" class="w-full sm:w-auto px-6 py-3 rounded-full bg-olive hover:bg-olive/90 text-ivory font-medium text-sm sm:text-base shadow-md transition transform hover:-translate-y-0.5">
+                                <span data-editable="ch10-btn-opt1" data-no-auto-wrap="true">Deal Accepted! 🤝</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-1.5 w-full sm:w-auto justify-center">
+                            <button onclick="acceptPS5Deal('ch10-btn-opt2')" class="w-full sm:w-auto px-6 py-3 rounded-full bg-dustyrose hover:bg-dustyrose/90 text-ivory font-medium text-sm sm:text-base shadow-md transition transform hover:-translate-y-0.5">
+                                <span data-editable="ch10-btn-opt2" data-no-auto-wrap="true">100% Yes! 🎮</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Acceptance Confirmation Message -->
+                    <div id="ps5-accepted-msg" class="hidden pt-4 border-t border-dustyrose/20 space-y-2">
+                        <p id="ps5-chosen-text" class="font-serif text-2xl text-olive font-semibold"></p>
+                        <p data-editable="ch10-accepted-subtext" class="text-sm sm:text-base text-warmbrown/80 font-light">
+                            Screenshot taken mentally! Best friendship contract officially signed forever. Thank you, bestie! 🎉💖
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between w-full mt-10 pt-4 border-t border-dustyrose/20 relative z-10">
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(9)" class="px-6 py-2.5 rounded-full border border-dustyrose/50 text-warmbrown hover:bg-blush/30 transition text-sm flex items-center space-x-2">
+                        <i class="fa-solid fa-arrow-left text-xs"></i>
+                        <span data-editable="nav-prev-ch10" data-no-auto-wrap="true">Previous</span>
+                    </button>
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <button onclick="goToChapter(11)" class="px-6 py-2.5 rounded-full bg-dustyrose text-ivory hover:bg-dustyrose/90 transition text-sm flex items-center space-x-2 shadow-sm">
+                        <span data-editable="nav-next-ch10" data-no-auto-wrap="true">Final Chapter</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== CHAPTER 11: THE FINALE ==================== -->
+        <section id="chapter-11" class="chapter-section w-full max-w-5xl flex-col items-center text-center py-6 px-4 relative">
+            <div class="text-center mb-8 relative z-10">
+                <div class="floral-badge">
+                    <i class="fa-solid fa-spa text-xs"></i>
+                    <span data-editable="ch11-badge">The Finale</span>
+                    <i class="fa-solid fa-spa text-xs"></i>
+                </div>
+                <h2 data-editable="ch11-heading" data-html="true" class="font-serif text-3xl sm:text-5xl md:text-6xl text-warmbrown font-normal mt-1">
+                    Four Years, Forever for Life <span class="text-dustyrose">♡</span>
+                </h2>
+                <div class="gold-divider"></div>
+            </div>
+
+            <div class="bg-ivory/90 p-5 sm:p-8 md:p-10 rounded-3xl border border-blush shadow-lg max-w-4xl w-full space-y-8 relative z-10 backdrop-blur-sm">
+                <!-- Large Cinematic 16:9 Hero Photograph Frame -->
+                <div class="relative group w-full aspect-video rounded-2xl overflow-hidden floral-frame bg-blush/30 shadow-xl">
+                    <div class="direct-photo-frame w-full h-full">
+                        <img id="img-ch11" src="images\dark.PNG" alt="Best Friends Forever" class="w-full h-full object-cover cinematic-hero-anim transition-transform duration-1000 group-hover:scale-105">
+                    </div>
+                </div>
+
+                <div class="max-w-2xl mx-auto space-y-5 pt-1">
+                    <p data-editable="ch11-p1" class="font-serif text-lg sm:text-2xl text-warmbrown/90 leading-relaxed">
+                        Here's to the memories we've already made, the college days we will never forget, and the lifetime of friendship still waiting ahead of us.once again, Happy Birthday Sri❤️!
+                    </p>
+
+                    <p data-editable="ch11-signoff" class="font-handwriting text-3xl sm:text-5xl text-dustyrose">
+                        Forever grateful for your Friendship.. ♡
+                    </p>
+                </div>
+
+                <div class="pt-3 flex items-center justify-center gap-2">
+                    <button onclick="goToChapter(1)" class="px-7 py-3 rounded-full border border-dustyrose text-warmbrown hover:bg-blush/40 transition text-sm inline-flex items-center space-x-2">
+                        <i class="fa-solid fa-rotate-left text-xs"></i>
+                        <span data-editable="ch11-restart-btn" data-no-auto-wrap="true">Return to Start</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Single Persistent Background Audio Element (Plays song.mp3 across all 11 chapters) -->
+    <audio id="bg-audio-player" loop preload="auto" class="hidden">
+        <source src="song.mp3" type="audio/mpeg">
+        <source src="Oh My Friend Video Songs Nuvvu Nenu Jattu Video Song Siddharth, Shruti Hassan Sr.mp3" type="audio/mpeg">
+    </audio>
+
+<button id="music-control"
+        class="music-control hidden"
+        onclick="toggleBackgroundMusic()"
+        aria-label="Pause background music">
+    <i id="music-control-icon" class="fa-solid fa-pause"></i>
+    <span id="music-control-label">Pause Music</span>
+</button>
+
+
+    <!-- Footer -->
+    <footer class="w-full py-4 text-center text-xs text-warmbrown/60 border-t border-dustyrose/10 bg-ivory/40 relative z-20">
+        <p data-editable="footer-text" class="font-serif italic text-sm">Made with endless warmth for Sri's Birthday ♡</p>
+    </footer>
+
+    <script>
+        let currentChapter = 1;
+        const totalChapters = 11;
+
+        // Generate Falling Petals
+        function createPetals() {
+            const container = document.getElementById('petal-container');
+            if (!container) return;
+            for (let i = 0; i < 16; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                const size = Math.random() * 10 + 8;
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${Math.random() * 100}%`;
+                petal.style.animationDuration = `${Math.random() * 8 + 11}s`;
+                petal.style.animationDelay = `${Math.random() * 10}s`;
+                container.appendChild(petal);
+            }
+        }
+
+       
+        // Start Background Music on User Interaction
+        function startBackgroundMusic() {
+            const audioPlayer = document.getElementById('bg-audio-player');
+            if (!audioPlayer) return;
+
+            audioPlayer.loop = true;
+
+            // Update Play/Pause button whenever music starts or pauses
+            audioPlayer.onplay = updateMusicControl;
+            audioPlayer.onpause = updateMusicControl;
+
+            if (audioPlayer.paused) {
+                audioPlayer.play()
+                    .then(() => {
+                        updateMusicControl();
+                    })
+                    .catch(() => {
+                        updateMusicControl();
+                        // Browser autoplay restriction handled upon user click interaction
+                    });
+            } else {
+                updateMusicControl();
+            }
+        }
+
+
+        // Update Music Control Button
+        function updateMusicControl() {
+            const audio = document.getElementById('bg-audio-player');
+            const button = document.getElementById('music-control');
+            const icon = document.getElementById('music-control-icon');
+            const label = document.getElementById('music-control-label');
+
+            if (!audio || !button || !icon || !label) return;
+
+            if (audio.paused) {
+                icon.className = 'fa-solid fa-play';
+                label.textContent = 'Play Music';
+                button.setAttribute('aria-label', 'Play background music');
+            } else {
+                icon.className = 'fa-solid fa-pause';
+                label.textContent = 'Pause Music';
+                button.setAttribute('aria-label', 'Pause background music');
+            }
+        }
+
+
+        // Toggle Background Music (Play / Pause)
+        function toggleBackgroundMusic() {
+            const audio = document.getElementById('bg-audio-player');
+            if (!audio) return;
+
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        updateMusicControl();
+                    })
+                    .catch(() => {
+                        updateMusicControl();
+                    });
+            } else {
+                audio.pause();
+                updateMusicControl();
+            }
+        }
+
+
+        // Enter Our Story (Chapter 1 CTA)
+        function enterStory() {
+            const musicButton = document.getElementById('music-control');
+
+            // Show the Music Play/Pause button
+            if (musicButton) {
+                musicButton.classList.remove('hidden');
+            }
+
+            // Start background music
+            startBackgroundMusic();
+
+            // Navigate to Chapter 2
+            goToChapter(2);
+        }
+
+        // Chapter Navigation (Does NOT restart or stop the persistent audio element)
+        function goToChapter(chapterNum) {
+            if (chapterNum < 1 || chapterNum > totalChapters) return;
+
+            // Pause music on the cover and preserve its current position.
+            if (chapterNum === 1) {
+    const audioPlayer = document.getElementById('bg-audio-player');
+
+    if (audioPlayer) {
+        audioPlayer.pause();
+    }
+
+    updateMusicControl();
+
+    const musicButton = document.getElementById('music-control');
+
+    if (musicButton) {
+        musicButton.classList.add('hidden');
+    }
+}
+
+            document.querySelectorAll('.chapter-section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+
+            const target = document.getElementById(`chapter-${chapterNum}`);
+            if (target) {
+                target.classList.add('active');
+                currentChapter = chapterNum;
+
+                const indicator = document.getElementById('chapter-indicator');
+                if (indicator) {
+                    indicator.textContent = `Chapter ${currentChapter} of ${totalChapters}`;
+                }
+
+                const progress = document.getElementById('progress-bar');
+                if (progress) {
+                    progress.style.width = `${(currentChapter / totalChapters) * 100}%`;
+                }
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Chapter 6: Open Envelope & Reveal Letter
+        function openEnvelope() {
+            const envelope = document.getElementById('envelope');
+            const letter = document.getElementById('letter-content');
+            const instruction = document.getElementById('envelope-instruction');
+
+            if (envelope) envelope.classList.toggle('open');
+            if (letter) letter.classList.toggle('show');
+            if (instruction && envelope && envelope.classList.contains('open')) {
+                instruction.textContent = 'Read your birthday letter below ♡';
+            }
+
+        }
+
+        // Chapter 7: Blow Candle & Celebrate Wish
+        function blowCandle() {
+            const flame = document.getElementById('candle-flame');
+            const smokeContainer = document.getElementById('smoke-container');
+            const celebration = document.getElementById('wish-celebration');
+            const btn = document.getElementById('wish-btn');
+
+            if (flame && !flame.classList.contains('extinguished')) {
+                flame.classList.add('extinguished');
+
+                if (smokeContainer) {
+                    for (let i = 0; i < 4; i++) {
+                        const smoke = document.createElement('div');
+                        smoke.className = 'smoke';
+                        smoke.style.animationDelay = `${i * 0.25}s`;
+                        smokeContainer.appendChild(smoke);
+                    }
+                }
+
+                if (celebration) {
+                    celebration.classList.remove('hidden');
+                    celebration.classList.add('reveal-animate');
+                }
+
+                if (btn) {
+                    btn.classList.add('opacity-75');
+                }
+
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 80,
+                        spread: 70,
+                        origin: { y: 0.6 },
+                        colors: ['#F0DEDC', '#D8B6B0', '#DCE6D7', '#E9DDBD']
+                    });
+                }
+            }
+        }
+
+        // Chapter 9: Reveal Hidden Plot Twist
+        function revealPlotTwist() {
+            const card = document.getElementById('plot-twist-card');
+            const btn = document.getElementById('reveal-surprise-btn');
+            if (card) {
+                card.classList.remove('hidden');
+                card.classList.add('reveal-animate');
+            }
+            if (btn) {
+                btn.classList.add('hidden');
+            }
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 55,
+                    spread: 60,
+                    origin: { y: 0.65 },
+                    colors: ['#F0DEDC', '#D8B6B0', '#E9DDBD']
+                });
+            }
+        }
+
+        // Chapter 10: Open PS5 Gift Card
+        function openPS5Gift() {
+            const card = document.getElementById('ps5-gift-card');
+            const btnWrapper = document.getElementById('open-gift-btn-wrapper');
+            if (card) {
+                card.classList.remove('hidden');
+                card.classList.add('reveal-animate');
+            }
+            if (btnWrapper) {
+                btnWrapper.classList.add('hidden');
+            }
+        }
+
+        // Chapter 10: Accept PS5 Deal
+        function acceptPS5Deal(optionKey) {
+            const optEl = document.querySelector(`[data-editable="${optionKey}"]`);
+            const chosenLabel = optEl ? optEl.textContent.trim() : 'Deal Accepted! 🤝';
+            const responseBtns = document.getElementById('ps5-response-buttons');
+            const acceptedBox = document.getElementById('ps5-accepted-msg');
+            const chosenText = document.getElementById('ps5-chosen-text');
+
+            if (responseBtns) responseBtns.classList.add('hidden');
+            if (chosenText) chosenText.textContent = `"${chosenLabel}"`;
+            if (acceptedBox) {
+                acceptedBox.classList.remove('hidden');
+                acceptedBox.classList.add('reveal-animate');
+            }
+
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 90,
+                    spread: 75,
+                    origin: { y: 0.6 },
+                    colors: ['#F0DEDC', '#D8B6B0', '#DCE6D7', '#E9DDBD']
+                });
+            }
+        }
+
+        // Initialize Everything on DOM Ready
+        window.addEventListener('DOMContentLoaded', () => {
+            createPetals();
+        });
+    </script>
+</body>
+</html>
