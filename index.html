@@ -379,10 +379,1375 @@
 .music-control.hidden {
     display: none;
 }
+/* ===================================
+   CINEMATIC BIRTHDAY LOCK SCREEN
+=================================== */
+
+#birthday-lock.cinematic-lock {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    overflow: hidden;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            #fffaf8 0%,
+            #f8f0ed 55%,
+            #f1e5df 100%
+        );
+
+    transition:
+        opacity 1.2s ease,
+        visibility 1.2s ease;
+}
+
+/* Unlock transition */
+
+#birthday-lock.lock-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Moving background glow */
+
+.lock-aurora {
+    position: absolute;
+    inset: -20%;
+
+    background:
+        radial-gradient(
+            circle at 20% 30%,
+            rgba(231, 187, 184, 0.25),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(190, 207, 182, 0.30),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 255, 255, 0.8),
+            transparent 50%
+        );
+
+    animation: auroraMove 12s ease-in-out infinite alternate;
+}
+
+/* Stars */
+
+.lock-stars {
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        radial-gradient(#c9a98b 1px, transparent 1px),
+        radial-gradient(#d8b6b0 1px, transparent 1px);
+
+    background-size: 80px 80px, 120px 120px;
+    background-position: 0 0, 40px 60px;
+
+    opacity: 0.25;
+    animation: starDrift 35s linear infinite;
+}
+
+/* Card */
+
+.cinematic-lock-card {
+    position: relative;
+    z-index: 5;
+
+    width: min(460px, 92%);
+    padding: 38px 30px;
+
+    text-align: center;
+
+    border: 1px solid rgba(211, 177, 158, 0.6);
+    border-radius: 30px;
+
+    background: rgba(255, 250, 247, 0.72);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    box-shadow:
+        0 20px 80px rgba(120, 102, 94, 0.12),
+        inset 0 0 30px rgba(255, 255, 255, 0.5);
+
+    animation: cardAppear 1.5s ease both;
+}
+
+/* Top ornament */
+
+.lock-top-ornament {
+    color: #c5a17b;
+    letter-spacing: 4px;
+    font-size: 13px;
+
+    margin-bottom: 25px;
+
+    animation: ornamentGlow 4s ease-in-out infinite;
+}
+
+/* Lock container */
+
+.magic-lock-container {
+    position: relative;
+
+    width: 130px;
+    height: 130px;
+
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Glow behind lock */
+
+.lock-glow {
+    position: absolute;
+
+    width: 100px;
+    height: 100px;
+
+    border-radius: 50%;
+
+    background: rgba(224, 190, 166, 0.35);
+
+    filter: blur(25px);
+
+    animation: lockPulse 3s ease-in-out infinite;
+}
+
+/* Lock */
+
+.magic-lock {
+    position: relative;
+    width: 62px;
+    height: 76px;
+
+    animation: lockFloat 4s ease-in-out infinite;
+}
+
+/* Lock shackle */
+
+.lock-shackle {
+    position: absolute;
+
+    width: 36px;
+    height: 40px;
+
+    top: 0;
+    left: 13px;
+
+    border: 5px solid #c7a675;
+    border-bottom: none;
+
+    border-radius: 25px 25px 0 0;
+
+    transform-origin: center bottom;
+
+    animation: shackleMove 4s ease-in-out infinite;
+}
+
+/* Lock body */
+
+.lock-body {
+    position: absolute;
+
+    width: 62px;
+    height: 48px;
+
+    bottom: 0;
+
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #e8d2ac,
+        #c4a477,
+        #e9d7b9
+    );
+
+    box-shadow:
+        0 7px 20px rgba(185, 154, 120, 0.3),
+        inset 0 2px 4px rgba(255,255,255,0.6);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Keyhole */
+
+.lock-keyhole {
+    width: 10px;
+    height: 18px;
+
+    background: #8f7550;
+
+    border-radius: 10px;
+
+    position: relative;
+}
+
+.lock-keyhole::before {
+    content: "";
+
+    position: absolute;
+
+    width: 15px;
+    height: 15px;
+
+    top: -7px;
+    left: -2.5px;
+
+    border-radius: 50%;
+
+    background: #8f7550;
+}
+
+/* Small label */
+
+.lock-small-title {
+    color: #b99a78;
+
+    letter-spacing: 5px;
+    font-size: 11px;
+
+    margin-bottom: 12px;
+}
+
+/* Main title */
+
+.lock-main-title {
+    font-family: 'Cormorant Garamond', serif;
+
+    font-size: clamp(34px, 8vw, 43px);
+    line-height: 1.05;
+
+    font-weight: 500;
+
+    color: #9e8175;
+
+    margin-bottom: 18px;
+}
+
+.lock-main-title span {
+    color: #d0a7a1;
+    font-style: italic;
+}
+
+/* Description */
+
+.lock-description {
+    color: #88756d;
+    font-size: 14px;
+    line-height: 1.8;
+
+    margin-bottom: 22px;
+}
+
+/* Divider */
+
+.lock-divider {
+    color: #c5a17b;
+    font-size: 13px;
+    letter-spacing: 4px;
+
+    margin: 20px 0;
+}
+
+/* PIN label */
+
+.pin-label {
+    color: #b49a85;
+
+    font-size: 10px;
+    letter-spacing: 4px;
+
+    margin-bottom: 12px;
+}
+
+/* PIN field */
+
+#birthday-lock #birthday-pin {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 17px 12px;
+
+    border-radius: 16px;
+
+    border: 1px solid rgba(216, 182, 176, 0.8);
+
+    background: rgba(255, 255, 255, 0.7);
+
+    color: #8c7169;
+
+    text-align: center;
+
+    font-size: 20px;
+    letter-spacing: 6px;
+
+    outline: none;
+
+    transition: all 0.4s ease;
+}
+
+#birthday-lock #birthday-pin:focus {
+    border-color: #cba8a0;
+
+    box-shadow:
+        0 0 0 4px rgba(216, 182, 176, 0.15),
+        0 0 25px rgba(216, 182, 176, 0.15);
+
+    transform: scale(1.02);
+}
+
+#birthday-lock #birthday-pin::placeholder {
+    color: #cbb8ae;
+    font-size: 14px;
+    letter-spacing: 3px;
+}
+
+/* Unlock button */
+
+.cinematic-unlock-button {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 15px;
+
+    border: none;
+    border-radius: 50px;
+
+    background: linear-gradient(
+        135deg,
+        #d8b6b0,
+        #cba29b
+    );
+
+    color: #fffaf7;
+
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 25px rgba(216, 182, 176, 0.25);
+
+    transition: all 0.4s ease;
+}
+
+.cinematic-unlock-button:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(216, 182, 176, 0.4);
+
+    background: linear-gradient(
+        135deg,
+        #dfc0ba,
+        #c99c96
+    );
+}
+
+.unlock-heart {
+    display: inline-block;
+    margin-left: 8px;
+
+    animation: heartBeat 2s ease-in-out infinite;
+}
+
+/* Error */
+
+#pin-error {
+    min-height: 24px;
+
+    margin-top: 15px;
+
+    color: #b36b70;
+
+    font-size: 13px;
+}
+
+/* Bottom message */
+
+.lock-bottom-text {
+    margin-top: 25px;
+
+    color: #b7a294;
+
+    font-size: 9px;
+    letter-spacing: 4px;
+}
+
+/* Floating flowers */
+
+.lock-flower {
+    position: absolute;
+
+    color: #d7aaa6;
+
+    opacity: 0.45;
+
+    pointer-events: none;
+
+    animation: flowerFloat 7s ease-in-out infinite;
+}
+
+.lock-flower-left {
+    left: 5%;
+    top: 12%;
+
+    font-size: 90px;
+}
+
+.lock-flower-right {
+    right: 5%;
+    bottom: 12%;
+
+    font-size: 110px;
+
+    animation-delay: -3s;
+}
+
+/* Falling flower emojis */
+
+.lock-petals span {
+    position: absolute;
+    top: -10%;
+
+    pointer-events: none;
+
+    opacity: 0.55;
+
+    animation: lockPetalFall linear infinite;
+}
+
+.lock-petals span:nth-child(1) {
+    left: 5%;
+    animation-duration: 12s;
+}
+
+.lock-petals span:nth-child(2) {
+    left: 18%;
+    animation-duration: 16s;
+    animation-delay: -5s;
+}
+
+.lock-petals span:nth-child(3) {
+    left: 30%;
+    animation-duration: 13s;
+    animation-delay: -2s;
+}
+
+.lock-petals span:nth-child(4) {
+    left: 45%;
+    animation-duration: 18s;
+    animation-delay: -7s;
+}
+
+.lock-petals span:nth-child(5) {
+    left: 60%;
+    animation-duration: 11s;
+    animation-delay: -4s;
+}
+
+.lock-petals span:nth-child(6) {
+    left: 75%;
+    animation-duration: 15s;
+    animation-delay: -8s;
+}
+
+.lock-petals span:nth-child(7) {
+    left: 88%;
+    animation-duration: 17s;
+    animation-delay: -3s;
+}
+
+.lock-petals span:nth-child(8) {
+    left: 95%;
+    animation-duration: 14s;
+    animation-delay: -6s;
+}
+
+/* Animations */
+
+@keyframes auroraMove {
+    0% {
+        transform: translate(-2%, -2%) scale(1);
+    }
+
+    100% {
+        transform: translate(2%, 2%) scale(1.1);
+    }
+}
+
+@keyframes starDrift {
+    from {
+        background-position: 0 0, 40px 60px;
+    }
+
+    to {
+        background-position: 400px 300px, -300px 400px;
+    }
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes ornamentGlow {
+    0%, 100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes lockPulse {
+    0%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.9;
+    }
+}
+
+@keyframes lockFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes shackleMove {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(-8deg);
+    }
+}
+
+@keyframes heartBeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+}
+
+@keyframes flowerFloat {
+    0%, 100% {
+        transform: translateY(0) rotate(-10deg);
+    }
+
+    50% {
+        transform: translateY(-25px) rotate(10deg);
+    }
+}
+
+@keyframes lockPetalFall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes lockShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-8px);
+    }
+
+    50% {
+        transform: translateX(8px);
+    }
+
+    75% {
+        transform: translateX(-5px);
+    }
+}
+
+/* Wrong PIN animation */
+
+#birthday-lock.shake .cinematic-lock-card {
+    animation: lockShake 0.4s ease;
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+    .cinematic-lock-card {
+        padding: 28px 20px;
+    }
+
+    .lock-flower-left {
+        left: -15px;
+        font-size: 65px;
+    }
+
+    .lock-flower-right {
+        right: -15px;
+        font-size: 75px;
+    }
+
+    .lock-main-title {
+        font-size: 34px;
+    }
+}
+/* ==========================================
+   EXTRA CINEMATIC MAGIC
+========================================== */
+
+/* Living background */
+#birthday-lock {
+    animation: lockBackgroundBreathing 8s ease-in-out infinite alternate;
+}
+
+@keyframes lockBackgroundBreathing {
+    0% {
+        background-color: #f8f0ed;
+    }
+    100% {
+        background-color: #fffaf7;
+    }
+}
+
+/* Card magical breathing */
+.cinematic-lock-card {
+    animation:
+        cardAppear 1.5s ease both,
+        cardBreathing 6s ease-in-out 1.5s infinite;
+}
+
+@keyframes cardBreathing {
+    0%, 100% {
+        box-shadow:
+            0 20px 80px rgba(120, 102, 94, 0.12),
+            0 0 0 rgba(220, 180, 170, 0);
+    }
+
+    50% {
+        box-shadow:
+            0 25px 90px rgba(120, 102, 94, 0.17),
+            0 0 35px rgba(226, 187, 178, 0.18);
+    }
+}
+
+/* Glowing border */
+.cinematic-lock-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 30px;
+    padding: 1px;
+
+    background: linear-gradient(
+        135deg,
+        #e8c9bb,
+        transparent,
+        #d8b6b0,
+        transparent,
+        #e9ddbd
+    );
+
+    background-size: 300% 300%;
+    animation: borderMagic 8s linear infinite;
+
+    pointer-events: none;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+@keyframes borderMagic {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    50% {
+        background-position: 100% 100%;
+    }
+
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+/* Main heading floating */
+.lock-main-title {
+    animation: titleFloat 5s ease-in-out infinite;
+}
+
+@keyframes titleFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+/* Golden lock glow */
+.magic-lock-container {
+    filter: drop-shadow(0 0 10px rgba(218, 190, 145, 0.3));
+}
+
+.lock-body {
+    animation: goldenGlow 3s ease-in-out infinite;
+}
+
+@keyframes goldenGlow {
+    0%, 100% {
+        box-shadow: 0 5px 20px rgba(185, 154, 120, 0.2);
+    }
+
+    50% {
+        box-shadow:
+            0 5px 35px rgba(185, 154, 120, 0.45),
+            0 0 25px rgba(238, 211, 166, 0.4);
+    }
+}
+
+/* Input magical focus */
+#birthday-lock #birthday-pin:focus {
+    animation: inputGlow 2s ease-in-out infinite;
+}
+
+@keyframes inputGlow {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(216, 182, 176, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(216, 182, 176, 0.3);
+    }
+}
+
+/* Unlock button sparkle */
+.cinematic-unlock-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.cinematic-unlock-button::before {
+    content: "";
+    position: absolute;
+
+    top: 0;
+    left: -120%;
+
+    width: 80%;
+    height: 100%;
+
+    background: linear-gradient(
+        110deg,
+        transparent,
+        rgba(255,255,255,0.45),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+
+    animation: buttonShine 5s ease-in-out infinite;
+}
+
+@keyframes buttonShine {
+    0%, 70% {
+        left: -120%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
+
+/* Floating teddy bears */
+.lock-teddy-corner {
+    animation: teddyGardenFloat 6s ease-in-out infinite;
+}
+
+@keyframes teddyGardenFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Flower decorations rotate slowly */
+.lock-flower {
+    animation:
+        flowerFloat 7s ease-in-out infinite,
+        flowerRotate 18s linear infinite;
+}
+
+@keyframes flowerRotate {
+    from {
+        rotate: 0deg;
+    }
+
+    to {
+        rotate: 360deg;
+    }
+}
+
+/* Error feedback */
+#birthday-lock.shake .cinematic-lock-card {
+    animation: lockShake 0.45s ease;
+}
+
+#birthday-lock.shake #birthday-pin {
+    border-color: #d99b9b;
+    box-shadow: 0 0 20px rgba(217, 155, 155, 0.25);
+}   
+/* ==========================================
+   FIREFLIES
+========================================== */
+
+.lock-firefly {
+    position: absolute;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #e7c999;
+
+    box-shadow:
+        0 0 8px #e7c999,
+        0 0 20px rgba(231, 201, 153, 0.7);
+
+    pointer-events: none;
+    z-index: 2;
+
+    animation: fireflyFloat ease-in-out infinite;
+}
+
+@keyframes fireflyFloat {
+    0%, 100% {
+        transform: translate(0, 0);
+        opacity: 0.1;
+    }
+
+    25% {
+        opacity: 0.9;
+    }
+
+    50% {
+        transform: translate(30px, -40px);
+        opacity: 0.4;
+    }
+
+    75% {
+        opacity: 1;
+    }
+}
+
+/* ==========================================
+   SPARKLES
+========================================== */
+
+.lock-sparkle {
+    position: absolute;
+
+    color: #c8a67b;
+    font-size: 14px;
+
+    pointer-events: none;
+    z-index: 2;
+
+    animation: sparkleTwinkle ease-in-out infinite;
+}
+
+@keyframes sparkleTwinkle {
+    0%, 100% {
+        opacity: 0;
+        transform: scale(0.3) rotate(0deg);
+    }
+
+    50% {
+        opacity: 0.9;
+        transform: scale(1.2) rotate(90deg);
+    }
+}
+
+/* ==========================================
+   SHOOTING STARS
+========================================== */
+
+.lock-shooting-star {
+    position: absolute;
+
+    width: 100px;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(211, 173, 130, 0.8),
+        transparent
+    );
+
+    transform: rotate(-35deg);
+
+    opacity: 0;
+
+    animation: shootingStar 8s linear infinite;
+
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes shootingStar {
+    0% {
+        transform: translate(0, 0) rotate(-35deg);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    15% {
+        transform: translate(-250px, 180px) rotate(-35deg);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+/* MAGICAL WEBSITE REVEAL */
+
+#birthday-lock.unlock-magic {
+    animation: magicalUnlock 1.5s ease forwards;
+}
+
+@keyframes magicalUnlock {
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    40% {
+        transform: scale(1.03);
+        filter: brightness(1.08);
+    }
+
+    100% {
+        transform: scale(1.12);
+        filter: brightness(1.3);
+        opacity: 0;
+    }
+}
+
+/* Accessibility: respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .lock-firefly,
+    .lock-sparkle,
+    .lock-shooting-star,
+    .lock-teddy-corner,
+    .lock-flower,
+    .magic-lock,
+    .lock-glow {
+        animation-duration: 10s !important;
+    }
+}
+/* =========================================
+   CINEMATIC UNLOCK SEQUENCE
+========================================= */
+
+/* Main screen reveal */
+#birthday-lock.unlock-magic {
+    animation: cinematicScreenFade 5s ease forwards !important;
+}
+
+/* Card transformation */
+#birthday-lock.unlock-magic .cinematic-lock-card {
+    animation: cinematicCardReveal 3.2s ease forwards !important;
+}
+
+/* Lock starts glowing intensely */
+#birthday-lock.unlock-magic .magic-lock-container {
+    animation: lockEnergyBurst 2.4s ease forwards;
+    z-index: 10;
+}
+
+/* Shackle opens */
+#birthday-lock.unlock-magic .lock-shackle {
+    animation: shackleOpen 1.5s ease forwards !important;
+}
+
+/* Lock body shines */
+#birthday-lock.unlock-magic .lock-body {
+    animation: lockGoldBurst 2s ease forwards;
+}
+
+/* Background magical flash */
+#birthday-lock.unlock-magic::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+    z-index: 20;
+
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 255, 255, 0.95),
+        rgba(255, 242, 224, 0.7),
+        transparent 70%
+    );
+
+    opacity: 0;
+
+    animation: magicalFlash 4.5s ease forwards;
+}
+
+/* Card disappears dramatically */
+@keyframes cinematicCardReveal {
+
+    0% {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+    }
+
+    25% {
+        transform: scale(1.03);
+    }
+
+    55% {
+        opacity: 1;
+        transform: scale(1.08);
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.85) translateY(-30px);
+        filter: blur(12px);
+    }
+}
+
+/* Entire lock screen fades out */
+@keyframes cinematicScreenFade {
+
+    0% {
+        opacity: 1;
+        background-color: #f8f0ed;
+    }
+
+    65% {
+        opacity: 1;
+    }
+
+    85% {
+        opacity: 0.9;
+        background-color: #fffaf3;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+/* Lock rises and expands */
+@keyframes lockEnergyBurst {
+
+    0% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+
+    30% {
+        transform: scale(1.2);
+        filter: brightness(1.4);
+    }
+
+    65% {
+        transform: scale(1.7);
+        filter: brightness(2);
+    }
+
+    100% {
+        transform: scale(2.5);
+        filter: brightness(2.5);
+        opacity: 0;
+    }
+}
+
+/* Lock shackle unlocks */
+@keyframes shackleOpen {
+
+    0% {
+        transform: rotate(0deg);
+    }
+
+    30% {
+        transform: rotate(-10deg);
+    }
+
+    60% {
+        transform: rotate(-35deg) translateY(-8px);
+    }
+
+    100% {
+        transform: rotate(-60deg) translateY(-15px);
+        opacity: 0;
+    }
+}
+
+/* Golden flash on lock */
+@keyframes lockGoldBurst {
+
+    0% {
+        filter: brightness(1);
+    }
+
+    30% {
+        filter: brightness(1.8);
+        box-shadow: 0 0 30px #e9d2a8;
+    }
+
+    60% {
+        filter: brightness(2.5);
+        box-shadow: 0 0 70px #f6dfb0;
+    }
+
+    100% {
+        filter: brightness(3);
+        opacity: 0;
+    }
+}
+
+/* Screen light flash */
+@keyframes magicalFlash {
+
+    0%, 20% {
+        opacity: 0;
+        transform: scale(0.2);
+    }
+
+    45% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    65% {
+        opacity: 0.45;
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(1.8);
+    }
+}
+
+/* Flying particles */
+.unlock-particle {
+    position: absolute;
+
+    z-index: 30;
+
+    pointer-events: none;
+
+    font-size: var(--particle-size);
+
+    animation: particleExplosion 3.5s cubic-bezier(.15,.7,.3,1) forwards;
+
+    filter: drop-shadow(0 0 8px rgba(255, 220, 180, 0.6));
+}
+
+@keyframes particleExplosion {
+
+    0% {
+        transform: translate(-50%, -50%) scale(0.2) rotate(0deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+        transform:
+            translate(
+                calc(-50% + var(--moveX)),
+                calc(-50% + var(--moveY))
+            )
+            scale(0.3)
+            rotate(360deg);
+
+        opacity: 0;
+    }
+}
+
+/* Disable button during unlock */
+#birthday-lock.unlock-magic .cinematic-unlock-button {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Reduce motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+    #birthday-lock.unlock-magic,
+    #birthday-lock.unlock-magic * {
+        animation-duration: 1s !important;
+    }
+}
 
     </style>
 </head>
 <body class="paper-bg min-h-screen flex flex-col justify-between relative selection:bg-blush selection:text-warmbrown">
+    <!-- CINEMATIC BIRTHDAY LOCK -->
+<div id="birthday-lock" class="cinematic-lock">
+
+    <!-- Animated background -->
+    <div class="lock-aurora"></div>
+    <div class="lock-stars"></div>
+
+    <!-- Floating petals -->
+    <div class="lock-petals">
+        <span>🌸</span>
+        <span>🌷</span>
+        <span>✿</span>
+        <span>🌸</span>
+        <span>✧</span>
+        <span>🌷</span>
+        <span>❀</span>
+        <span>🌸</span>
+    </div>
+
+    <!-- Decorative flowers -->
+    <div class="lock-flower lock-flower-left">❀</div>
+    <div class="lock-flower lock-flower-right">✿</div>
+
+    <div class="cinematic-lock-card">
+
+        <!-- Animated top ornament -->
+        <div class="lock-top-ornament">
+            ✧ ───── ♡ ───── ✧
+        </div>
+
+        <!-- Animated Lock -->
+        <div class="magic-lock-container">
+            <div class="lock-glow"></div>
+
+            <div class="magic-lock">
+                <div class="lock-shackle"></div>
+
+                <div class="lock-body">
+                    <div class="lock-keyhole"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text -->
+        <p class="lock-small-title">
+            A SECRET GARDEN
+        </p>
+
+        <h1 class="lock-main-title">
+            A Little World of Frienship<br>
+            
+        </h1>
+
+        <p class="lock-description">
+            Some beautiful things are meant<br>
+            to be opened with a special date.
+        </p>
+
+        <div class="lock-divider">
+            ✿ ─── ✧ ─── ✿
+        </div>
+
+        <!-- PIN -->
+        <form onsubmit="unlockBirthday(event)" class="cinematic-pin-form">
+
+            <div class="pin-label">
+                Enter the Day We First Spoke on 📞
+            </div>
+
+            <input
+                id="birthday-pin"
+                type="password"
+                inputmode="numeric"
+                maxlength="8"
+                autocomplete="off"
+                placeholder="DD · MM · YYYY"
+                aria-label="Birthday PIN"
+            >
+
+            <button type="submit" class="cinematic-unlock-button">
+                <span>Unlock Our Friendship Story</span>
+                <span class="unlock-heart">♡</span>
+            </button>
+
+        </form>
+
+        <p id="pin-error" aria-live="polite"></p>
+
+
+    </div>
+
+</div>
 
     <!-- Floating Petals & Light Particles Container -->
     <div id="petal-container" class="fixed inset-0 pointer-events-none z-10 overflow-hidden">
@@ -1792,6 +3157,166 @@ Finally, thank you for entering my life unexpectedly and becoming one of its mos
         window.addEventListener('DOMContentLoaded', () => {
             createPetals();
         });
+    
+function unlockBirthday(event) {
+    event.preventDefault();
+
+    const pinInput = document.getElementById("birthday-pin");
+    const lock = document.getElementById("birthday-lock");
+    const error = document.getElementById("pin-error");
+    const button = document.querySelector(".cinematic-unlock-button");
+
+    const correctPin = "31122022";
+
+    // Empty PIN
+    if (pinInput.value.trim() === "") {
+        error.textContent = "Please enter the birthday date ♡";
+        pinInput.focus();
+        return;
+    }
+
+    // Wrong PIN
+    if (pinInput.value !== correctPin) {
+        error.textContent = "Oops! That's not the right date ♡ Try again.";
+
+        lock.classList.remove("shake");
+        void lock.offsetWidth;
+        lock.classList.add("shake");
+
+        pinInput.value = "";
+        pinInput.focus();
+        return;
+    }
+
+    // Correct PIN
+    error.textContent = "";
+
+    // Prevent multiple clicks
+    pinInput.disabled = true;
+    button.disabled = true;
+
+    button.innerHTML = "Unlocking Our Little Universe... ✨";
+
+    // Start cinematic unlock
+    lock.classList.add("unlock-magic");
+
+    // Create magical particles
+    createUnlockParticles(lock);
+
+    // Hide lock screen AFTER animation completes
+    setTimeout(() => {
+        lock.style.display = "none";
+    }, 5000);
+}
+
+
+// Magical particle burst
+function createUnlockParticles(lock) {
+
+    const symbols = ["✦", "✧", "♡", "🌸", "✨", "❀"];
+
+    for (let i = 0; i < 55; i++) {
+
+        const particle = document.createElement("span");
+
+        particle.className = "unlock-particle";
+
+        particle.innerHTML =
+            symbols[Math.floor(Math.random() * symbols.length)];
+
+        particle.style.left = "50%";
+        particle.style.top = "50%";
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 150 + Math.random() * 500;
+
+        particle.style.setProperty(
+            "--moveX",
+            Math.cos(angle) * distance + "px"
+        );
+
+        particle.style.setProperty(
+            "--moveY",
+            Math.sin(angle) * distance + "px"
+        );
+
+        particle.style.setProperty(
+            "--particle-size",
+            (12 + Math.random() * 22) + "px"
+        );
+
+        particle.style.animationDelay =
+            (Math.random() * 0.5) + "s";
+
+        lock.appendChild(particle);
+
+        setTimeout(() => {
+            particle.remove();
+        }, 5000);
+    }
+}
+/* ==========================================
+   MAGICAL LOCK SCREEN PARTICLES
+========================================== */
+
+(function createLockMagic() {
+
+    const lockScreen = document.getElementById("birthday-lock");
+
+    if (!lockScreen) return;
+
+    // Fireflies
+    for (let i = 0; i < 22; i++) {
+        const firefly = document.createElement("span");
+
+        firefly.className = "lock-firefly";
+
+        firefly.style.left = Math.random() * 100 + "%";
+        firefly.style.top = Math.random() * 100 + "%";
+
+        firefly.style.animationDuration =
+            (3 + Math.random() * 6) + "s";
+
+        firefly.style.animationDelay =
+            (Math.random() * 6) + "s";
+
+        lockScreen.appendChild(firefly);
+    }
+
+    // Magical sparkles
+    for (let i = 0; i < 18; i++) {
+        const sparkle = document.createElement("span");
+
+        sparkle.className = "lock-sparkle";
+        sparkle.textContent = Math.random() > 0.5 ? "✦" : "✧";
+
+        sparkle.style.left = Math.random() * 100 + "%";
+        sparkle.style.top = Math.random() * 100 + "%";
+
+        sparkle.style.animationDuration =
+            (2 + Math.random() * 5) + "s";
+
+        sparkle.style.animationDelay =
+            (Math.random() * 5) + "s";
+
+        lockScreen.appendChild(sparkle);
+    }
+
+    // Shooting stars
+    for (let i = 0; i < 3; i++) {
+        const star = document.createElement("span");
+
+        star.className = "lock-shooting-star";
+
+        star.style.top = (10 + Math.random() * 60) + "%";
+        star.style.left = (20 + Math.random() * 80) + "%";
+
+        star.style.animationDelay = (i * 4) + "s";
+
+        lockScreen.appendChild(star);
+    }
+
+})();
     </script>
 </body>
 </html>
